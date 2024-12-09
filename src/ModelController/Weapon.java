@@ -27,11 +27,6 @@ public class Weapon extends Item {
     }
 
     @Override
-    public void setItem_id(int item_id) {
-        super.setItem_id(item_id);
-    }
-
-    @Override
     public int getItem_type() {
         return super.getItem_type();
     }

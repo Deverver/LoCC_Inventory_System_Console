@@ -1,4 +1,7 @@
-package ModelController;
+package Controller;
+
+import ModelController.Inventory;
+import ModelController.Item;
 
 /*
 Having 2 separate Inventory classes gives us a more precise control over our characters equipped inventory,
@@ -74,11 +77,29 @@ public class InventoryManager {
     }
     //endregion
 
+
+    //region Inventory Command Methods
     public double getRemainingWeight() {
         setRemainingWeightCapacity(weightLimit - currentWeight);
         return remainingWeightCapacity;
     }
 
+    public void showInventory(){
+
+    }
+
+    public void addToInventory(){
+
+    }
+
+    public void removeFromInventory(){
+
+    }
+
+    public void sortInventory(){
+
+    }
+    //endregion
 
 
 

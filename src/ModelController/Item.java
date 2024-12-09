@@ -13,7 +13,7 @@ As such some games have multiple or shortened descriptions on their items.
 Since we don't know the future scope of LoCC we have chosen to use our String itemType as both a way to display and also sort our items.
 Depending on the type of list/array we chose items can be sorted in different ways...???
  */
-abstract class Item implements ItemAction {
+public abstract class Item implements ItemAction {
 
 private int item_id;
 private int item_type;
