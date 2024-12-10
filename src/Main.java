@@ -1,8 +1,17 @@
+import DbController.DatabaseConnection;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
     static Scanner input = new Scanner(System.in);
     public static void main(String[] args) {
+
+        try {
+            DatabaseConnection.createFiles();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         boolean run = true;
 

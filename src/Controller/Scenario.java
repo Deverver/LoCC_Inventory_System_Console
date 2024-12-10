@@ -38,13 +38,10 @@ private String scenario_description;
     }
     //endregion
 
-
-    @Override
     public void showScenarioInfo() {
 
     }
 
-    @Override
     public void playScenario() {
 
 
