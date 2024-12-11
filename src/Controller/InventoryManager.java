@@ -99,6 +99,20 @@ public class InventoryManager {
     public void sortInventory(){
 
     }
+    
+    public List searchForItem(String searchedName){
+        List searchList = new List<String>;
+
+       try for each(Item item : playerInventory){
+            if (playerInventory.get(i).item_name.equalsIgnoreCase(searchName)){
+            searchList.add(playerInventoryget(i).item_name)
+            } 
+        } 
+        catch(inputException e){
+            return e.printStackTrace;
+        }
+            return searchList;
+    }
     //endregion
 
 
