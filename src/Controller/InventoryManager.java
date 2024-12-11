@@ -84,8 +84,16 @@ public class InventoryManager {
         return remainingWeightCapacity;
     }
 
-    public void showInventory(){
-
+    public List showInventory(Inventory inventoryName){
+        List listedInventory = new List<String>
+        for each (Item item : inventoryname){
+            listedInventory.add(item.item_name);
+            listedInventory.add(item.item_type);
+        }
+        catch (e){
+            return e.printStackTrave;
+        }
+        return listedInventory;
     }
 
     public void addToInventory(){
@@ -97,15 +105,15 @@ public class InventoryManager {
     }
 
     public void sortInventory(){
-
+    
     }
     
     public List searchForItem(String searchedName){
         List searchList = new List<String>;
 
        try for each(Item item : playerInventory){
-            if (playerInventory.get(i).item_name.equalsIgnoreCase(searchName)){
-            searchList.add(playerInventoryget(i).item_name)
+            if (item.item_name.equalsIgnoreCase(searchName)){
+            searchList.add(Item item)
             } 
         } 
         catch(inputException e){
