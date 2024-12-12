@@ -7,7 +7,7 @@ public class Weapon extends Item {
         super();
     }
 
-    public Weapon(int item_id, int item_type, String item_name, String item_description, double item_weight, double item_value, int weapon_type) {
+    public Weapon(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value, int weapon_type) {
         super(item_id, item_type, item_name, item_description, item_weight, item_value);
         this.weapon_type = weapon_type;
     }
@@ -27,12 +27,12 @@ public class Weapon extends Item {
     }
 
     @Override
-    public int getItem_type() {
+    public String getItem_type() {
         return super.getItem_type();
     }
 
     @Override
-    public void setItem_type(int item_type) {
+    public void setItem_type(String item_type) {
         super.setItem_type(item_type);
     }
 

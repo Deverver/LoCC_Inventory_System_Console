@@ -5,7 +5,7 @@ public class Ressource extends Item {
     public Ressource() {
         super();
     }
-    public Ressource(int item_id, int item_type, String item_name, String item_description, double item_weight, double item_value) {
+    public Ressource(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value) {
         super(item_id, item_type, item_name, item_description, item_weight, item_value);
     }
 
@@ -21,12 +21,12 @@ public class Ressource extends Item {
     }
 
     @Override
-    public int getItem_type() {
+    public String getItem_type() {
         return super.getItem_type();
     }
 
     @Override
-    public void setItem_type(int item_type) {
+    public void setItem_type(String item_type) {
         super.setItem_type(item_type);
     }
 

@@ -7,7 +7,7 @@ public class Consumable extends Item {
         super();
     }
 
-    public Consumable(int item_id, int item_type, String item_name, String item_description, double item_weight, double item_value, int itemAmount) {
+    public Consumable(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value, int itemAmount) {
         super(item_id, item_type, item_name, item_description, item_weight, item_value);
         this.itemAmount = itemAmount;
     }
@@ -32,12 +32,12 @@ public class Consumable extends Item {
     }
 
     @Override
-    public int getItem_type() {
+    public String getItem_type() {
         return super.getItem_type();
     }
 
     @Override
-    public void setItem_type(int item_type) {
+    public void setItem_type(String item_type) {
         super.setItem_type(item_type);
     }
 

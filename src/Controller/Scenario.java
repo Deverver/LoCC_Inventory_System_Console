@@ -1,16 +1,28 @@
 package Controller;
 
+import java.io.File;
+import java.io.IOException;
+
 public class Scenario {
-private String scenario_type;
-private String scenario_name;
-private String scenario_description;
+    private int scenario_id;
+    private String scenario_type;
+    private String scenario_name;
+    private String scenario_description;
 
     public Scenario() {} //Empty constructor
+
     public Scenario(String scenario_type, String scenario_name, String scenario_description) {
         this.scenario_type = scenario_type;
         this.scenario_name = scenario_name;
         this.scenario_description = scenario_description;
-    }// Full Constructor
+    }// Constructor without the ID, we use this to create the Scenarios locally
+
+    public Scenario(int scenario_id,String scenario_type, String scenario_name, String scenario_description) {
+        this.scenario_id = scenario_id;
+        this.scenario_type = scenario_type;
+        this.scenario_name = scenario_name;
+        this.scenario_description = scenario_description;
+    }// Full constructor with id, we use this when we read scenarios from the DB, in order to know their primary key
 
     //region Getters & Setters
     public String getScenario_type() {
@@ -37,7 +49,19 @@ private String scenario_description;
         this.scenario_description = scenario_description;
     }
     //endregion
-
+    public static void createScenarioFiles() throws IOException {
+        File file3 = new File("scenario_data");
+        File file4 = new File("item_data");
+        if (!file3.exists()&&!file4.exists()) {
+            if (file3.createNewFile() && file4.createNewFile()) {
+                System.out.println("File Created");
+            } else {
+                System.out.println("File Not Created");
+            }
+        }else {
+            System.out.println("Files Already Exists");
+        }
+    }
     public void showScenarioInfo() {
 
     }

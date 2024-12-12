@@ -36,6 +36,7 @@ public class DatabaseConnection {
             System.out.println("Files Already Exists");
         }
     }
+
     public static void getLogin() throws FileNotFoundException {
         BufferedReader userReader = new BufferedReader(new FileReader("username"));
         BufferedReader passReader = new BufferedReader(new FileReader("password"));

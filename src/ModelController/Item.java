@@ -16,7 +16,7 @@ Depending on the type of list/array we chose items can be sorted in different wa
 public abstract class Item implements ItemAction {
 
 private int item_id;
-private int item_type;
+private String item_type;
 private String item_name;
 private String item_description;
 private double item_weight;
@@ -24,7 +24,7 @@ private double item_value;
 
 
     public Item() {}// Empty constructor
-    public Item(int item_id, int item_type, String item_name, String item_description, double item_weight, double item_value) {
+    public Item(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value) {
         this.item_id = item_id;
         this.item_type = item_type;
         this.item_name = item_name;
@@ -42,11 +42,11 @@ private double item_value;
         this.item_id = item_id;
     }
 
-    public int getItem_type() {
+    public String getItem_type() {
         return item_type;
     }
 
-    public void setItem_type(int item_type) {
+    public void setItem_type(String item_type) {
         this.item_type = item_type;
     }
 

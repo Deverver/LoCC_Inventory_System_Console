@@ -1,31 +1,22 @@
 package Controller;
 
-import ModelController.Inventory;
-import ModelController.Item;
 
-/*
-Having 2 separate Inventory classes gives us a more precise control over our characters equipped inventory,
-if LoCC in the future requires characters to have different equipment slots, or specific slot types, -
-like a class that cannot use a certain weapon or amor type, this will allow us to do so.
-*/
+import ModelController.Item;
+import java.util.ArrayList;
+import java.util.Comparator;
+
 public class InventoryManager {
     private double goldAmount;
     private double weightLimit;
     private double currentWeight;
     private double remainingWeightCapacity;
 
-    private Inventory playerInventory;
-    private Inventory equipmentInventory;
+    private int upgradeValue = 32;
+    private int inventoryMaxCapacity = 192;
+    private int currentMaxCapacity = 32;
 
-    public InventoryManager() {}// Empty constructor
-    public InventoryManager(double goldAmount, double weightLimit, double currentWeight, double remainingWeightCapacity, Inventory playerInventory, Inventory equipmentInventory) {
-        this.goldAmount = goldAmount;
-        this.weightLimit = weightLimit;
-        this.currentWeight = currentWeight;
-        this.remainingWeightCapacity = remainingWeightCapacity;
-        this.playerInventory = playerInventory;
-        this.equipmentInventory = equipmentInventory;
-    }// Full Constructor
+    public ArrayList<Item> inventory = new ArrayList<>(currentMaxCapacity);
+
 
     //region Getters & Setters
     public double getGoldAmount() {
@@ -59,22 +50,6 @@ public class InventoryManager {
     public void setRemainingWeightCapacity(double remainingWeightCapacity) {
         this.remainingWeightCapacity = remainingWeightCapacity;
     }
-
-    public Inventory getPlayerInventory() {
-        return playerInventory;
-    }
-
-    public void setPlayerInventory(Inventory playerInventory) {
-        this.playerInventory = playerInventory;
-    }
-
-    public Inventory getEquipmentInventory() {
-        return equipmentInventory;
-    }
-
-    public void setEquipmentInventory(Inventory equipmentInventory) {
-        this.equipmentInventory = equipmentInventory;
-    }
     //endregion
 
 
@@ -84,46 +59,80 @@ public class InventoryManager {
         return remainingWeightCapacity;
     }
 
-    public List showInventory(Inventory inventoryName){
-        List listedInventory = new List<String>
-        for each (Item item : inventoryname){
-            listedInventory.add(item.item_name);
-            listedInventory.add(item.item_type);
+    public void showInventory() {
+
+        try {
+            for (Item item : inventory) {
+                System.out.println(inventory.indexOf(item));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (e){
-            return e.printStackTrave;
+    }
+
+
+    public void addToInventory(Item item) {
+        inventory.add(item);
+    }
+
+    public void removeFromInventory(int itemID){
+
+        if (inventory.contains (itemID)) {
+            inventory.remove(itemID);
+        }else {
+            System.out.println("Item not found in inventory");
         }
-        return listedInventory;
-    }
-
-    public void addToInventory(){
 
     }
 
-    public void removeFromInventory(){
+    public void upgradeInventory(){
+        if (currentMaxCapacity <= inventoryMaxCapacity ) {
+            currentMaxCapacity = (currentMaxCapacity + upgradeValue);
+        }else {
+            System.out.println("This inventory is at capacity: " + currentMaxCapacity + " out of " + inventoryMaxCapacity);
+        }
+    }
+
+
+    public void sortInventoryAlpha(){
+        inventory.sort(Comparator.comparing(item -> item.getItem_name()));
+    }
+
+    public void sortInventoryWeight(){
+        inventory.sort(Comparator.comparingDouble(Item::getItem_weight));
+    }
+    public void sortInventoryValue(){
+        inventory.sort(Comparator.comparingDouble(Item::getItem_value));
+    }
+
+    public static void searchInventory() {
 
     }
 
-    public void sortInventory(){
-    
-    }
-    
-    public List searchForItem(String searchedName){
-        List searchList = new List<String>;
+    public ArrayList searchForItem(String searchedName){
+        ArrayList<String> searchList = new ArrayList();
 
-       try for each(Item item : playerInventory){
-            if (item.item_name.equalsIgnoreCase(searchName)){
-            searchList.add(Item item)
-            } 
-        } 
-        catch(inputException e){
-            return e.printStackTrace;
+       try{
+           for(Item item : inventory){
+               if (item.getItem_name().equalsIgnoreCase(searchedName)){
+                   searchList.add(String.valueOf(item));
+               }
+           }
+       }
+        catch(Exception e){
+            e.printStackTrace();
         }
             return searchList;
     }
+    public boolean inventoryFull(){
+        if(inventory.size() == currentMaxCapacity){
+            return true;
+        }
+        return false;
+    }
+
     //endregion
-
-
+    
 
 
 }// End
