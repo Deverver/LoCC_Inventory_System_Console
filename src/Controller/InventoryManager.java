@@ -1,22 +1,26 @@
 package Controller;
 
-
+import ModelController.Inventory;
 import ModelController.Item;
-import java.util.ArrayList;
+
 import java.util.Comparator;
 
 public class InventoryManager {
     private double goldAmount;
-    private double weightLimit;
+    private double weightLimit = 50;
     private double currentWeight;
     private double remainingWeightCapacity;
 
+    private int absoluteMaxCapacity = 192;
     private int upgradeValue = 32;
-    private int inventoryMaxCapacity = 192;
     private int currentMaxCapacity = 32;
 
-    public ArrayList<Item> inventory = new ArrayList<>(currentMaxCapacity);
+    private Inventory inventory;
 
+    // Constructor
+    public InventoryManager( ) {
+        this.inventory = new Inventory();
+    }
 
     //region Getters & Setters
     public double getGoldAmount() {
@@ -50,89 +54,97 @@ public class InventoryManager {
     public void setRemainingWeightCapacity(double remainingWeightCapacity) {
         this.remainingWeightCapacity = remainingWeightCapacity;
     }
+
+    public int getAbsoluteMaxCapacity() {
+        return absoluteMaxCapacity;
+    }
+
+    public void setAbsoluteMaxCapacity(int absoluteMaxCapacity) {
+        this.absoluteMaxCapacity = absoluteMaxCapacity;
+    }
+
+    public int getUpgradeValue() {
+        return upgradeValue;
+    }
+
+    public void setUpgradeValue(int upgradeValue) {
+        this.upgradeValue = upgradeValue;
+    }
+
+    public int getCurrentMaxCapacity() {
+        return currentMaxCapacity;
+    }
+
+    public void setCurrentMaxCapacity(int currentMaxCapacity) {
+        this.currentMaxCapacity = currentMaxCapacity;
+    }
     //endregion
 
-
-    //region Inventory Command Methods
-    public double getRemainingWeight() {
-        setRemainingWeightCapacity(weightLimit - currentWeight);
-        return remainingWeightCapacity;
+    public boolean addToInventory(Item item){
+        return inventory.addItem(item);
     }
 
-    public void showInventory() {
+    public boolean removeFromInventory(Item item){
+        return inventory.removeItem(item);
+    }
 
-        try {
-            for (Item item : inventory) {
-                System.out.println(inventory.indexOf(item));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void showInventory(){
+        System.out.println("Inventory currently contains: ");
+        int itemSlot = 1;
+        for (Item item : inventory.getContainedItems()){
+            System.out.println("Inventory space " + itemSlot + " contains " + item);
+            itemSlot++;
         }
     }
 
-
-    public void addToInventory(Item item) {
-        inventory.add(item);
+    public int getCurrentInventorySize() {
+        return inventory.getSize();
     }
-
-    public void removeFromInventory(int itemID){
-
-        if (inventory.contains (itemID)) {
-            inventory.remove(itemID);
-        }else {
-            System.out.println("Item not found in inventory");
-        }
-
-    }
-
-    public void upgradeInventory(){
-        if (currentMaxCapacity <= inventoryMaxCapacity ) {
-            currentMaxCapacity = (currentMaxCapacity + upgradeValue);
-        }else {
-            System.out.println("This inventory is at capacity: " + currentMaxCapacity + " out of " + inventoryMaxCapacity);
-        }
-    }
-
 
     public void sortInventoryAlpha(){
-        inventory.sort(Comparator.comparing(item -> item.getItem_name()));
+        inventory.getContainedItems().sort(Comparator.comparing(item -> item.getItem_name()));
     }
 
     public void sortInventoryWeight(){
-        inventory.sort(Comparator.comparingDouble(Item::getItem_weight));
+        inventory.getContainedItems().sort(Comparator.comparingDouble(Item::getItem_weight));
     }
     public void sortInventoryValue(){
-        inventory.sort(Comparator.comparingDouble(Item::getItem_value));
+        inventory.getContainedItems().sort(Comparator.comparingDouble(Item::getItem_value));
     }
 
-    public static void searchInventory() {
-
+    public void searchInventory(String searchedName) {
+        inventory.findContainedItemByName(searchedName);
     }
 
-    public ArrayList searchForItem(String searchedName){
-        ArrayList<String> searchList = new ArrayList();
-
-       try{
-           for(Item item : inventory){
-               if (item.getItem_name().equalsIgnoreCase(searchedName)){
-                   searchList.add(String.valueOf(item));
-               }
-           }
-       }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-            return searchList;
-    }
     public boolean inventoryFull(){
-        if(inventory.size() == currentMaxCapacity){
+        if(inventory.getSize() == inventory.getContainedInventoryMaxCapacity()){
+            System.out.println("Inventory is full: " + inventory.getSize() + "/" + inventory.getContainedInventoryMaxCapacity());
             return true;
         }
         return false;
     }
 
-    //endregion
-    
+    public boolean inventoryEmpty(){
+        if(inventory.getSize() == 0){
+            System.out.println("Inventory is empty: " + inventory.getSize() + "/" + inventory.getContainedInventoryMaxCapacity());
+            return true;
+        }
+        return false;
+    }
 
 
-}// End
+    public boolean upgradeInventory(){
+        if (inventory.getContainedInventoryMaxCapacity() <= absoluteMaxCapacity - upgradeValue) {
+            inventory.setInventoryMaxCapacity(inventory.getContainedInventoryMaxCapacity() + upgradeValue);
+            System.out.println("Inventory max capacity is now " + inventory.getContainedInventoryMaxCapacity());
+            return true;
+        }
+        System.out.println("Inventory could not be upgraded by: " + upgradeValue + " slots");
+        System.out.println("Maximum input for this operation is currently: " + (absoluteMaxCapacity - inventory.getContainedInventoryMaxCapacity()));
+        return false;
+    }
+
+
+
+
+}// InventoryManager End
