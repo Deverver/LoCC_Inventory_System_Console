@@ -4,6 +4,7 @@ import Model.Inventory;
 import Model.Item;
 
 import java.util.Comparator;
+import java.util.List;
 
 public class InventoryManager {
     private double goldAmount;
@@ -15,10 +16,10 @@ public class InventoryManager {
     private int upgradeValue = 32;
     private int currentMaxCapacity = 32;
 
-    private Inventory inventory;
+    private final Inventory inventory;
 
     // Constructor
-    public InventoryManager( ) {
+    public InventoryManager() {
         this.inventory = new Inventory();
     }
 
@@ -80,99 +81,65 @@ public class InventoryManager {
     }
     //endregion
 
-    public boolean addToInventory(Item item){
+    public boolean addToInventory(Item item) {
         return inventory.addItem(item);
     }
 
-    public boolean removeFromInventory(String itemName){
+    public boolean removeFromInventory(String itemName) {
         return inventory.removeItem(itemName);
     }
 
-    public void showInventory(){
-        System.out.println("""
-                __________________________________
-                ********* SYSTEM MESSAGE *********
-                """);
-        System.out.println("Inventory currently contains: ");
-        int itemSlot = 1;
-        for (Item item : inventory.getContainedItems()){
-            System.out.println("Inventory space " + itemSlot + " contains " + item);
-            itemSlot++;
-        }// loop
-        System.out.println("__________________________________");
+    public List<Item> showInventory() {
+        return inventory.getContainedItems();
     }
 
     public int getCurrentInventorySize() {
         return inventory.getSize();
     }
 
-    public void sortInventoryAlpha(){
+    public void sortInventoryAlpha() {
         inventory.getContainedItems().sort(Comparator.comparing(item -> item.getItem_name()));
     }
 
-    public void sortInventoryWeight(){
+    public void sortInventoryWeight() {
         inventory.getContainedItems().sort(Comparator.comparingDouble(Item::getItem_weight));
     }
-    public void sortInventoryValue(){
+
+    public void sortInventoryValue() {
         inventory.getContainedItems().sort(Comparator.comparingDouble(Item::getItem_value));
     }
 
-    public void searchInventory(String searchedName) {
+    public Item searchInventory(String searchedName) {
         inventory.findContainedItemByName(searchedName);
+        return null;
     }
 
-    public boolean inventoryFull(){
-        if(inventory.getSize() == inventory.getContainedInventoryMaxCapacity()){
-            System.out.println("""
-                __________________________________
-                ********* SYSTEM MESSAGE *********
-                """);
-            System.out.println("Inventory is full: " + inventory.getSize() + "/" + inventory.getContainedInventoryMaxCapacity());
-            System.out.println("__________________________________");
+    public boolean inventoryFull() {
+        if (inventory.getSize() == inventory.getContainedInventoryMaxCapacity()) {
             return true;
         }
         return false;
     }
 
-    public boolean inventoryEmpty(){
-        if(inventory.getSize() == 0){
-            System.out.println("""
-                __________________________________
-                ********* SYSTEM MESSAGE *********
-                """);
-            System.out.println("Inventory is empty: " + inventory.getSize() + "/" + inventory.getContainedInventoryMaxCapacity());
-            System.out.println("__________________________________");
+    public boolean inventoryEmpty() {
+        if (inventory.getSize() == 0) {
             return true;
         }
         return false;
     }
 
 
-    public int upgradeInventory(){
+    public int upgradeInventory() {
         if (inventory.getContainedInventoryMaxCapacity() <= absoluteMaxCapacity - upgradeValue) {
             inventory.setInventoryMaxCapacity(inventory.getContainedInventoryMaxCapacity() + upgradeValue);
-            System.out.println("""
-                __________________________________
-                ********* SYSTEM MESSAGE *********
-                """);
-            System.out.println("Inventory max capacity is now " + inventory.getContainedInventoryMaxCapacity());
-            System.out.println("__________________________________");
             return 1;
         }
-        System.out.println("""
-                __________________________________
-                ********* SYSTEM MESSAGE *********
-                """);
-        System.out.println("Inventory could not be upgraded by: " + upgradeValue + " slots");
-        System.out.println("Maximum input for this operation is currently: " + (absoluteMaxCapacity - inventory.getContainedInventoryMaxCapacity()));
-        System.out.println("__________________________________");
         return 0;
     }
 
-    public void refreshInventory(){
+    public void refreshInventory() {
         setRemainingWeightCapacity(getWeightLimit() - getCurrentWeight());
     }
-
 
 
 }// InventoryManager End

@@ -32,24 +32,21 @@ public class Inventory {
     public boolean addItem(Item item) {
         if (containedItems.size() < containedInventoryMaxCapacity) {
             containedItems.add(item);
-            System.out.println("Item: " + item.getItem_name() + " added to Inventory");
             return true;
         } else {
-            System.out.println("Item could not be added, inventory is: " + containedItems.size() + "/" + containedInventoryMaxCapacity);
             return false;
         }
     }
 
     public boolean removeItem(String itemName) {
-        System.out.println("Item: " + itemName + " removed from inventory");
         return containedItems.remove(removeItem(itemName));
     }// not sure why but I cannot make an else statement to include an error, guess we will have to do so when the method is called
 
     public List<Item> getContainedItems() {
         listedInventory.clear();
         // We create a copy of the Inventory to show to users, this keeps the Inventory inside the InventoryManager in control, this should prevent external changes.
-       listedInventory = new ArrayList<>(containedItems);
-       return listedInventory;
+        listedInventory = new ArrayList<>(containedItems);
+        return listedInventory;
     }
 
     public List<Item> findContainedItemByName(String searchedItemName) {
@@ -65,11 +62,6 @@ public class Inventory {
     public int getSize() {
         return containedItems.size();
     }
-
-
-
-
-
 
 
 }// Inventory Class End

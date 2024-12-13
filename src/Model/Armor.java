@@ -1,7 +1,7 @@
 package Model;
 
 public class Armor extends Item {
-private boolean IsEquipped;
+    private boolean IsEquipped;
 
 
 
@@ -15,6 +15,14 @@ private boolean IsEquipped;
 
 
     //region Getters & Setters
+    public boolean isEquipped() {
+        return IsEquipped;
+    }
+
+    public void setEquipped(boolean equipped) {
+        IsEquipped = equipped;
+    }
+
     @Override
     public int getItem_id() {
         return super.getItem_id();

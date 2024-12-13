@@ -67,7 +67,7 @@ public class ScenarioManager {
             System.out.println("Files Already Exists");
         }
     }
-
+    /*
     public ScenarioManager createScenario() {
         ScenarioManager randomScenarioManager;
         randomScenarioManager = DatabaseRepo.readRandomScenarioFromDB();
@@ -90,6 +90,6 @@ public class ScenarioManager {
         showScenarioInfo();
         return randomItem;
     }
-
+    */
 
 }// End

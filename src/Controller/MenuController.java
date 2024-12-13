@@ -1,5 +1,10 @@
 package Controller;
 
+import DbController.DatabaseRepo;
+import Model.Armor;
+import Model.Item;
+import Model.Weapon;
+
 import java.util.Scanner;
 
 public class MenuController {
@@ -8,7 +13,6 @@ public class MenuController {
     private final ScenarioManager scenarioManager = new ScenarioManager();
 
     public boolean menu(boolean running) {
-
 
         //scenarioManager.commnads
 
@@ -19,11 +23,10 @@ public class MenuController {
                     
                     These are your options:
                     [1] Show Inventory
-                    [2] Do Scenario -Gain random item-
+                    [2] Scenario Options -Gain random item-
                     [3] Sell an Item
                     [4] Upgrade Bag space
                     [5] Exit program
-                    __________________________________
                     """);
 
             switch (input.nextInt()) {
@@ -32,6 +35,12 @@ public class MenuController {
                         System.out.println(inventoryManager.inventoryEmpty());
                     } else {
                         inventoryManager.showInventory();
+                        int itemSlot = 1;
+                        for (Item item : inventoryManager.showInventory()) {
+                            System.out.println("Inventory space " + itemSlot + " contains " + item);
+                            itemSlot++;
+                        }// loop
+
                         System.out.println("""
                                 __________________________________
                                 ************ MENU [1] ************
@@ -39,7 +48,6 @@ public class MenuController {
                                 These are your options:
                                 [1] Sort Inventory
                                 [2] Search Inventory
-                                __________________________________
                                 """);
                         if (input.nextInt() == 1) {
                             System.out.println("""
@@ -49,10 +57,10 @@ public class MenuController {
                                     Select how Inventory is Sorted:
                                     [1] Sort by Alphabetical Order
                                     [2] Sort by Weight Value
-                                    [3] Sort by Item Value                                
+                                    [3] Sort by Item Value
                                     """);
 
-                            switch (input.nextInt()){
+                            switch (input.nextInt()) {
                                 case 1:
                                     System.out.println("Sorted Inventory by Alphabetical Order...");
                                     inventoryManager.sortInventoryAlpha();
@@ -65,7 +73,7 @@ public class MenuController {
                                     System.out.println("Sorted Inventory by Item Value...");
                                     inventoryManager.sortInventoryValue();
                                     break;
-                            }
+                            }// Sub Switch case
                             inventoryManager.showInventory();
                         } else if (input.nextInt() == 2) {
                             System.out.println("""
@@ -81,41 +89,125 @@ public class MenuController {
                         }
                     }
                     break;
+                // Case 1 End
                 case 2:
-
-                    break;
-
-                case 3:
-                    String itemToDelete = input.next();
-                    inventoryManager.removeFromInventory(itemToDelete);
-
-                    break;
-
-                case 4:
-                    try {
-                        inventoryManager.upgradeInventory();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
-
-                case 5:
                     System.out.println("""
                             __________________________________
-                            ********** MENU SYSTEM **********
-                              - - - - SHUTTING DOWN - - - - 
-                            __________________________________
+                            ************ MENU [2] ************
+                            
+                            These are your options:
+                            [1] Play Random Scenario
+                            [2] Show All Scenarios
                             """);
-                    running = false;
-                    break;
 
-                case 6:
-
+                    if (input.nextInt() == 1) {
+                        System.out.println("Playing Random Scenario...");
+                        //scenarioManager.playScenario();
+                        break;
+                    } else if (input.nextInt() == 2) {
+                        System.out.println("Displaying All Possible Scenarios...");
+                        break;
+                    }
                     break;
+                // Case 2 Emd
+                case 3:
+                    System.out.println("""
+                            __________________________________
+                            ************ MENU [3] ************
+                            
+                            These are your options:
+                            [1] Sell Item
+                            [2] Sell All non equipped Items
+                            """);
+                    switch (input.nextInt()) {
+                        case 1:
+                            System.out.println("""
+                                    __________________________________
+                                    ******** SUB MENU [3] [1] ********
+                                          - - Item Selling - -
+                                    
+                                    Enter the name of the item you wish to Sell
+                                    """);
+                            String itemToDelete = input.next();
+                            Item searchedItem = inventoryManager.searchInventory(itemToDelete);
+                            inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + searchedItem.getItem_value());
+                            inventoryManager.removeFromInventory(itemToDelete);
+                            break;
+                        case 2:
+                            System.out.println("""
+                                    __________________________________
+                                    ******** SUB MENU [3] [2] ********
+                                      - Sell All non equipped Items -
+                                    
+                                    Are you sure you wish to do this?
+                                               (YES / NO)
+                                    """);
+                            if (input.next().toLowerCase().equals("yes")) {
+                                for (Item item : inventoryManager.showInventory()) {
+
+                                    if (item ! instanceof Armor || item ! instanceof Weapon){
+                                        inventoryManager.removeFromInventory(item.getItem_name());
+                                    }
+                                    else if (item instanceof Armor || item instanceof Weapon) {
+
+                                        if (!((Armor) item).isEquipped() || !((Weapon) item).isEquipped()) {
+                                            inventoryManager.removeFromInventory(item.getItem_name());
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + input.nextInt());
+                    } else{
+                    break;
+                }
+                break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + input.nextInt());
             }
-        }
+            break;
+            // Case 3 End
+            case 4:
+                System.out.println("""
+                        __________________________________
+                        ************ MENU [4] ************
+                        
+                        These are your options:
+                        [1] Upgrade Inventory Capacity
+                        """);
+                switch (input.nextInt()) {
+                    case 1:
+                        System.out.println("Upgrading Inventory Capacity...");
+                        try {
+                            inventoryManager.upgradeInventory();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+
+                    case 5:
+                        System.out.println("""
+                                __________________________________
+                                ********** MENU SYSTEM **********
+                                  - - - - SHUTTING DOWN - - - -
+                                __________________________________
+                                """);
+                        running = false;
+                        break;
+
+                    case 6:
+
+                        break;
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + input.nextInt());
+        }// Main Switch case
         return running;
-    }
+    }// While Loop
 
 
-}
+}// MenuController End

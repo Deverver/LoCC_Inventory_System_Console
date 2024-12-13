@@ -2,6 +2,7 @@ package Model;
 
 public class Weapon extends Item {
     private int weapon_type;
+    private boolean IsEquipped;
 
     public Weapon() {
         super();
@@ -19,6 +20,14 @@ public class Weapon extends Item {
 
     public void setWeapon_type(int weapon_type) {
         this.weapon_type = weapon_type;
+    }
+
+    public boolean isEquipped() {
+        return IsEquipped;
+    }
+
+    public void setEquipped(boolean equipped) {
+        IsEquipped = equipped;
     }
 
     @Override
