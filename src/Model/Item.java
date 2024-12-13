@@ -1,4 +1,4 @@
-package ModelController;
+package Model;
 
 import Controller.ItemAction;
 
@@ -83,14 +83,20 @@ private double item_value;
     }
     //endregion
 
-    @Override
-    public void showItemInfo() {
 
+    public void showItemInfo() {
+        System.out.println("________________________");
+        System.out.println(this.getItem_name() +", " + this.getItem_type()+ ".");
+        System.out.println("________________________");
+        System.out.println(this.getItem_description());
+        System.out.println("________________________");
     }
 
-    @Override
-    public void useItem(){
 
+    public void useItem(){
+        System.out.println("________________________");
+        System.out.println("You used the " + this.getItem_type() + ", " + this.getItem_name() + ".");
+        System.out.println("________________________");
     }
 
 

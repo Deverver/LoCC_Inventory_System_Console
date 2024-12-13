@@ -1,8 +1,7 @@
 package DbController;
 
-import Controller.Scenario;
-import ModelController.Armor;
-import ModelController.Item;
+import Controller.ScenarioManager;
+import Model.*;
 
 import java.sql.*;
 
@@ -14,12 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseRepo {
-
-    public List<Scenario> scenario_list = new ArrayList<>();
+    public List<ScenarioManager> scenario_Manager_list = new ArrayList<>();
     public List<Item> item_list = new ArrayList<>();
 
-
-    //region Scenario commands
+    //region Scenario Commands
     public static void uploadToScenarios() {
         String filePath = "scenario_data";
         String sql = "INSERT INTO scenarios (scenarioType, scenarioName, scenarioDescription) VALUES (?, ?, ?)";
@@ -54,9 +51,8 @@ public class DatabaseRepo {
             ioe.printStackTrace();
         }
     }
-        //CRUD operations for Scenarios
 
-    public void createScenario(Scenario scenario) {
+    public void createScenario(ScenarioManager scenarioManager) {
         // In order to transfer data to the DB we have to make our object readable to MySQL
         // We do this by choosing where our object data goes in our SQL Query
         String sql = "INSERT INTO scenarios (scenario_type, scenario_name, scenario_description) VALUES (?, ?, ?)";
@@ -67,35 +63,35 @@ public class DatabaseRepo {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             // Selects where the data goes into our query
-            preparedStatement.setString(1, scenario.getScenario_type());
-            preparedStatement.setString(2, scenario.getScenario_name());
-            preparedStatement.setString(3, scenario.getScenario_description());
+            preparedStatement.setString(1, scenarioManager.getScenario_type());
+            preparedStatement.setString(2, scenarioManager.getScenario_name());
+            preparedStatement.setString(3, scenarioManager.getScenario_description());
 
             // Should "do" execute the query, and report if something went wrong
             int rowsInserted = preparedStatement.executeUpdate();
             if (rowsInserted > 0) {
-                System.out.println(scenario.getScenario_type() + " Scenario " + scenario.getScenario_name() + " has been created in DB");
+                System.out.println(scenarioManager.getScenario_type() + " Scenario " + scenarioManager.getScenario_name() + " has been created in DB");
             }
         } catch (SQLException e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
     }// createScenario End
 
-    public void updateScenario(Scenario scenario, int DBIndex) {
+    public void updateScenario(ScenarioManager scenarioManager, int DBIndex) {
         // In order to update in the DB, we have to provide and SET new data, and choose WHERE it goes
-        String sql = "UPDATE scenarios SET scenario_type = ?, scenario_name = ?, scenario_description = ?, WHERE id = "+ DBIndex;
+        String sql = "UPDATE scenarios SET scenario_type = ?, scenario_name = ?, scenario_description = ?, WHERE id = " + DBIndex;
 
         // We have to make a new connection to our DB
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setString(1, scenario.getScenario_name());
-            preparedStatement.setString(2, scenario.getScenario_type());
-            preparedStatement.setString(3, scenario.getScenario_description());
+            preparedStatement.setString(1, scenarioManager.getScenario_name());
+            preparedStatement.setString(2, scenarioManager.getScenario_type());
+            preparedStatement.setString(3, scenarioManager.getScenario_description());
 
             int rowsInserted = preparedStatement.executeUpdate();
             if (rowsInserted > 0) {
-                System.out.println("Scenario " + scenario.getScenario_name() + "Type: " + scenario.getScenario_type() + " has been updated in DB");
+                System.out.println("Scenario " + scenarioManager.getScenario_name() + "Type: " + scenarioManager.getScenario_type() + " has been updated in DB");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -120,101 +116,86 @@ public class DatabaseRepo {
         }
     }// deleteScenario End
 
-   public List<Scenario> readScenario(int DBIndex) {
+    public List<ScenarioManager> readScenario(int DBIndex) {
         String sql = "SELECT * FROM scenarios WHERE id = ?";
-        scenario_list.clear();// clears list so it can be reused
+        scenario_Manager_list.clear();// clears list so it can be reused
 
 
-       try (Connection connection = DatabaseConnection.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
 
-           System.out.println("Reading scenario...");
+            System.out.println("Reading scenario...");
 
-           int primaryKey = resultSet.getInt("id");
-           String scenario_type = resultSet.getString("scenarioType");
-           String scenario_name = resultSet.getString("scenarioName");
-           String scenario_description = resultSet.getString("scenarioDescription");
+            int primaryKey = resultSet.getInt("id");
+            String scenario_type = resultSet.getString("scenarioType");
+            String scenario_name = resultSet.getString("scenarioName");
+            String scenario_description = resultSet.getString("scenarioDescription");
 
-           scenario_list.add(new Scenario(primaryKey, scenario_type, scenario_name, scenario_description));
+            scenario_Manager_list.add(new ScenarioManager(primaryKey, scenario_type, scenario_name, scenario_description));
 
-       } catch (SQLException e) {
-           e.printStackTrace();
-       }
-       return scenario_list;
-   }// readScenario End
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return scenario_Manager_list;
+    }// readScenario End
 
-   public List<Scenario> readALLScenarios() {
+    public List<ScenarioManager> readALLScenarios() {
         String sql = "SELECT * FROM scenarios";
-        scenario_list.clear();// clears list so it can be reused
+        scenario_Manager_list.clear();// clears list so it can be reused
       /*
       The reason we use a Statement is in order to transfer the read data from the DB into a result-set
       that we can read from separately.
       this way we can create object from the stored data from the ResultSet.
       */
-       try (Connection connection = DatabaseConnection.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
 
-           // Loops through the resultset table, and creates the Scenario objects
-           while (resultSet.next()) {
-               int primaryKey = resultSet.getInt("id");
-               String scenario_type = resultSet.getString("scenarioType");
-               String scenario_name = resultSet.getString("scenarioName");
-               String scenario_description = resultSet.getString("scenarioDescription");
+            // Loops through the resultset table, and creates the Scenario objects
+            while (resultSet.next()) {
+                int primaryKey = resultSet.getInt("id");
+                String scenario_type = resultSet.getString("scenarioType");
+                String scenario_name = resultSet.getString("scenarioName");
+                String scenario_description = resultSet.getString("scenarioDescription");
 
-               scenario_list.add(new Scenario(primaryKey, scenario_type, scenario_name, scenario_description));
-           }// WLoop End
-       } catch (SQLException e) {
-           e.printStackTrace();
-       }
-       return scenario_list;
-   }// readScenario End
-    //endregion
+                scenario_Manager_list.add(new ScenarioManager(primaryKey, scenario_type, scenario_name, scenario_description));
+            }// WLoop End
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return scenario_Manager_list;
+    }// readScenario End
 
-
-    //region Item commands
-    public static void uploadToItems() {
-        String filePath = "item_data";
-        String sql = "INSERT INTO items (itemType, itemName, itemDescription, itemWeight, itemValue) VALUES (?, ?, ?, ?, ?)";
+    public ScenarioManager readRandomScenarioFromDB() throws SQLException {
+        String sql = "SELECT * FROM scenarios ORDER BY RAND() LIMIT 1";
+        scenario_Manager_list.clear();
 
         try (Connection connection = DatabaseConnection.getConnection();
-             BufferedReader reader2 = new BufferedReader(new FileReader(filePath));
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            ScenarioManager returnedScenarioManager;
 
-            String line;
-            while ((line = reader2.readLine()) != null) {
-                String[] values = line.split(",");
-                String TYPE = values[0];
-                String NAME = values[1];
-                String DESCRIPTION = values[2];
-                double WEIGHT = Double.parseDouble(values[3]);
-                double VALUE = Double.parseDouble(values[4]);
+            while (resultSet.next()) {
+                int primaryKey = resultSet.getInt("id");
+                String scenario_type = resultSet.getString("scenarioType");
+                String scenario_name = resultSet.getString("scenarioName");
+                String scenario_description = resultSet.getString("scenarioDescription");
 
-                preparedStatement.setString(1, TYPE);
-                preparedStatement.setString(2, NAME);
-                preparedStatement.setString(3, DESCRIPTION);
-                preparedStatement.setDouble(3,WEIGHT);
-                preparedStatement.setDouble(4,VALUE);
+                returnedScenarioManager = new ScenarioManager(primaryKey, scenario_type, scenario_name, scenario_description);
 
-                preparedStatement.addBatch();
             }
-            reader2.close();
-
-            int[] rowsInserted = preparedStatement.executeBatch();
-            System.out.println(rowsInserted.length + " rows inserted successfully.");
-
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+            return returnedScenarioManager;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    }// uploadToItems End
+        return null;
+    }
+    //endregion
 
-
-    //CRUD operations for Items
-    public void createItem(Item item){
-        String sql = "INSERT INTO items (itemType, itemName, itemDescription, itemWeight, itemValue) VALUES (?, ?, ?, ?, ?)";
+    //region Item Commands
+    public void createItem(Item item) {
+        String sql = "INSERT INTO itemList (itemType, itemName, itemDescription, itemWeight, itemValue) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -234,24 +215,134 @@ public class DatabaseRepo {
         }
     }// createItem End
 
-    public void readItem(){
+    public Item readRandomItemFromDB() {
+        String sql = "SELECT * FROM itemList ORDER BY RAND() LIMIT 1";
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            Item item1 = null;
+            int itemID = resultSet.getInt("itemID");
+            String itemName = resultSet.getString("itemName");
+            String itemType = resultSet.getString("itemType");
+            String itemDescription = resultSet.getString("itemDescription");
+            double itemWeight = resultSet.getFloat("itemWeight");
+            double itemValue = resultSet.getFloat("itemValue");
+            boolean itemStackable = resultSet.getBoolean("itemStackable");
+
+            switch (itemType){
+                case "Weapon":
+                    item1 = new Weapon(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1);
+                    break;
+                case "Helmet":
+                    item1 = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
+                    break;
+                case "Shoulder":
+                    item1 = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
+                    break;
+                case "Chest":
+                    item1 = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
+                    break;
+                case "Legs":
+                    item1 = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
+                    break;
+                case "Boots":
+                    item1 = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
+                    break;
+                case "Consumable":
+                    item1 = new Consumable(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1, itemStackable);
+                    break;
+                case "Resource":
+                    item1 = new Ressource(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1, itemStackable);
+                    break;
+            }
+
+            return item1;
+        } catch (SQLException e2) {
+            e2.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
 
     }// readItem End
 
-    public void readAllItems(){
+    public List<Item> readAllItemsFromDB() {
+        item_list.clear();
+        String sql = "SELECT * FROM itemList";
 
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+
+            int itemID = resultSet.getInt("itemID");
+            String itemName = resultSet.getString("itemName");
+            String itemType = resultSet.getString("itemType");
+            String itemDescription = resultSet.getString("itemDescription");
+            double itemWeight = resultSet.getFloat("itemWeight");
+            double itemValue = resultSet.getFloat("itemValue");
+            boolean itemStackable = resultSet.getBoolean("itemStackable");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return item_list;
     }// readAllItems End
 
-    public void updateItem(){
+    public void updateItem(Item item, int DBIndex) {
+        String sql = "UPDATE Itemlist SET itemName = ?, itemType = ?, itemDescription = ?, itemWeight = ?, itemValue = ?,itemStackable = ? WHERE itemID = " + DBIndex;
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
+            preparedStatement.setString(1, item.getItem_name());
+            preparedStatement.setString(2, item.getItem_type());
+            preparedStatement.setString(3, item.getItem_description());
+            preparedStatement.setDouble(4, item.getItem_weight());
+            preparedStatement.setDouble(5, item.getItem_value());
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Item " + item.getItem_name() + " has been updated in DB");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }// updateItem End
 
-    public void deleteItem(){
+    public void deleteItem(Item item, int DBIndex) {
+        String sql = "DELETE FROM Itemlist WHERE itemID = " + DBIndex;
 
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, item.getItem_id());
+            int rowsDeleted = preparedStatement.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("Item from DB index: " + DBIndex + "has been deleted from DB");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error deleting item with DB index: " + DBIndex);
+            e.printStackTrace();
+        }
     }// deleteItem End
     //endregion
 
+    //region Inventory Commands
+    public void createSavedInventory(Inventory inventory) {
 
+    }
+
+    public void readSavedInventory() {
+
+    }
+
+    public void updateSavedInventory(Inventory inventory) {
+
+    }
+
+    public void deleteSavedInventory() {}
+    //endregion
 
 
 }// DatabaseRepo End

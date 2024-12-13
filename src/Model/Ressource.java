@@ -1,12 +1,16 @@
-package ModelController;
+package Model;
 
 public class Ressource extends Item {
+    int itemAmount;
+    boolean itemStackable;
 
     public Ressource() {
         super();
     }
-    public Ressource(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value) {
+    public Ressource(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value, int itemAmount, boolean itemStackable) {
         super(item_id, item_type, item_name, item_description, item_weight, item_value);
+        this.itemAmount = itemAmount;
+        this.itemStackable = itemStackable;
     }
 
     //region Getters & Setters

@@ -1,4 +1,4 @@
-package ModelController;
+package Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ it could be a shops inventory or a rewards screen from a quest - in essence it i
 */
 
 public class Inventory {
-    private static int containedInventoryMaxCapacity = 32;
+    private int containedInventoryMaxCapacity = 32;
     private List<Item> containedItems;
     private List<Item> listedInventory;
 
@@ -25,7 +25,7 @@ public class Inventory {
     }
 
     public void setInventoryMaxCapacity(int inventoryMaxCapacity) {
-        Inventory.containedInventoryMaxCapacity = inventoryMaxCapacity;
+        containedInventoryMaxCapacity = inventoryMaxCapacity;
     }
     //endregion
 
@@ -40,12 +40,13 @@ public class Inventory {
         }
     }
 
-    public boolean removeItem(Item item) {
-        System.out.println("Item: " + item.getItem_name() + " removed from inventory");
-        return containedItems.remove(item);
+    public boolean removeItem(String itemName) {
+        System.out.println("Item: " + itemName + " removed from inventory");
+        return containedItems.remove(removeItem(itemName));
     }// not sure why but I cannot make an else statement to include an error, guess we will have to do so when the method is called
 
     public List<Item> getContainedItems() {
+        listedInventory.clear();
         // We create a copy of the Inventory to show to users, this keeps the Inventory inside the InventoryManager in control, this should prevent external changes.
        listedInventory = new ArrayList<>(containedItems);
        return listedInventory;

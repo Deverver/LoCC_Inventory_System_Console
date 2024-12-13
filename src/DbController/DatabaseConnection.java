@@ -16,8 +16,7 @@ public class DatabaseConnection {
 
         try {
             return DriverManager.getConnection(URL, USER, PASSWORD);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -26,13 +25,13 @@ public class DatabaseConnection {
     public static void createFiles() throws IOException {
         File file1 = new File("username");
         File file2 = new File("password");
-        if (!file1.exists()&&!file2.exists()) {
+        if (!file1.exists() && !file2.exists()) {
             if (file1.createNewFile() && file2.createNewFile()) {
                 System.out.println("File Created");
             } else {
                 System.out.println("File Not Created");
             }
-        }else {
+        } else {
             System.out.println("Files Already Exists");
         }
     }
@@ -45,7 +44,7 @@ public class DatabaseConnection {
             PASSWORD = passReader.readLine();
             userReader.close();
             passReader.close();
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

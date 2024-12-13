@@ -1,7 +1,7 @@
 package Controller;
 
-import ModelController.Inventory;
-import ModelController.Item;
+import Model.Inventory;
+import Model.Item;
 
 import java.util.Comparator;
 
@@ -84,17 +84,22 @@ public class InventoryManager {
         return inventory.addItem(item);
     }
 
-    public boolean removeFromInventory(Item item){
-        return inventory.removeItem(item);
+    public boolean removeFromInventory(String itemName){
+        return inventory.removeItem(itemName);
     }
 
     public void showInventory(){
+        System.out.println("""
+                __________________________________
+                ********* SYSTEM MESSAGE *********
+                """);
         System.out.println("Inventory currently contains: ");
         int itemSlot = 1;
         for (Item item : inventory.getContainedItems()){
             System.out.println("Inventory space " + itemSlot + " contains " + item);
             itemSlot++;
-        }
+        }// loop
+        System.out.println("__________________________________");
     }
 
     public int getCurrentInventorySize() {
@@ -118,7 +123,12 @@ public class InventoryManager {
 
     public boolean inventoryFull(){
         if(inventory.getSize() == inventory.getContainedInventoryMaxCapacity()){
+            System.out.println("""
+                __________________________________
+                ********* SYSTEM MESSAGE *********
+                """);
             System.out.println("Inventory is full: " + inventory.getSize() + "/" + inventory.getContainedInventoryMaxCapacity());
+            System.out.println("__________________________________");
             return true;
         }
         return false;
@@ -126,24 +136,42 @@ public class InventoryManager {
 
     public boolean inventoryEmpty(){
         if(inventory.getSize() == 0){
+            System.out.println("""
+                __________________________________
+                ********* SYSTEM MESSAGE *********
+                """);
             System.out.println("Inventory is empty: " + inventory.getSize() + "/" + inventory.getContainedInventoryMaxCapacity());
+            System.out.println("__________________________________");
             return true;
         }
         return false;
     }
 
 
-    public boolean upgradeInventory(){
+    public int upgradeInventory(){
         if (inventory.getContainedInventoryMaxCapacity() <= absoluteMaxCapacity - upgradeValue) {
             inventory.setInventoryMaxCapacity(inventory.getContainedInventoryMaxCapacity() + upgradeValue);
+            System.out.println("""
+                __________________________________
+                ********* SYSTEM MESSAGE *********
+                """);
             System.out.println("Inventory max capacity is now " + inventory.getContainedInventoryMaxCapacity());
-            return true;
+            System.out.println("__________________________________");
+            return 1;
         }
+        System.out.println("""
+                __________________________________
+                ********* SYSTEM MESSAGE *********
+                """);
         System.out.println("Inventory could not be upgraded by: " + upgradeValue + " slots");
         System.out.println("Maximum input for this operation is currently: " + (absoluteMaxCapacity - inventory.getContainedInventoryMaxCapacity()));
-        return false;
+        System.out.println("__________________________________");
+        return 0;
     }
 
+    public void refreshInventory(){
+        setRemainingWeightCapacity(getWeightLimit() - getCurrentWeight());
+    }
 
 
 

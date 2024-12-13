@@ -1,15 +1,27 @@
-package ModelController;
+package Model;
 
-public class Armor extends Item {
-
-    public Armor() {
+public class Consumable extends Item {
+    private int itemAmount;
+    private boolean itemStackable;
+    public Consumable() {
         super();
     }
-    public Armor(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value) {
+
+    public Consumable(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value, int itemAmount, boolean itemStackable) {
         super(item_id, item_type, item_name, item_description, item_weight, item_value);
+        this.itemAmount = itemAmount;
+        this.itemStackable = itemStackable;
     }
 
     //region Getters & Setters
+    public int getItemAmount() {
+        return itemAmount;
+    }
+
+    public void setItemAmount(int itemAmount) {
+        this.itemAmount = itemAmount;
+    }
+
     @Override
     public int getItem_id() {
         return super.getItem_id();
@@ -80,5 +92,6 @@ public class Armor extends Item {
         super.useItem();
     }
     //endregion
+
 
 }// End

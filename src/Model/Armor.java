@@ -1,29 +1,28 @@
-package ModelController;
+package Model;
 
-public class Weapon extends Item {
-    private int weapon_type;
+public class Armor extends Item {
+private boolean IsEquipped;
 
-    public Weapon() {
+
+
+    public Armor() {
         super();
     }
-
-    public Weapon(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value, int weapon_type) {
+    public Armor(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value) {
         super(item_id, item_type, item_name, item_description, item_weight, item_value);
-        this.weapon_type = weapon_type;
     }
+
+
 
     //region Getters & Setters
-    public int getWeapon_type() {
-        return weapon_type;
-    }
-
-    public void setWeapon_type(int weapon_type) {
-        this.weapon_type = weapon_type;
-    }
-
     @Override
     public int getItem_id() {
         return super.getItem_id();
+    }
+
+    @Override
+    public void setItem_id(int item_id) {
+        super.setItem_id(item_id);
     }
 
     @Override

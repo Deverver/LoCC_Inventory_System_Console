@@ -1,20 +1,16 @@
-import Controller.InventoryManager;
 import Controller.MenuController;
-import Controller.Scenario;
+import Controller.ScenarioManager;
 import DbController.DatabaseConnection;
 
-import java.awt.*;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
+        MenuController menuController = new MenuController();
 
         try {
             DatabaseConnection.createFiles();
-            Scenario.createScenarioFiles();
+            ScenarioManager.createScenarioFiles();
         } catch (IOException e2) {
             throw new RuntimeException(e2.getMessage());
         } catch (Exception e3) {
@@ -22,7 +18,7 @@ public class Main {
         }
 
         boolean run = true;
-        MenuController.menu(run);
+        menuController.menu(run);
 
 
     }

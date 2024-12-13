@@ -1,64 +1,112 @@
 package Controller;
 
-import Controller.InventoryManager;
-
 import java.util.Scanner;
 
 public class MenuController {
     private Scanner input = new Scanner(System.in);
-    private boolean menu(boolean running){
-    InventoryManager player = new InventoryManager();
+    private final InventoryManager inventoryManager = new InventoryManager();
+    private final ScenarioManager scenarioManager = new ScenarioManager();
+
+    public boolean menu(boolean running) {
 
 
-    while (running) {
+        //scenarioManager.commnads
 
-        System.out.println("To show inventory contents press 1");
-        System.out.println("To go on an adventure press 2");
-        System.out.println("To sell an item press 3");
-        System.out.println("To upgrade bag space 4");
-        System.out.println("To exit program press 5");
+        while (running) {
+            System.out.println("""
+                    __________________________________
+                    ********** MENU SYSTEM **********
+                    
+                    These are your options:
+                    [1] Show Inventory
+                    [2] Do Scenario -Gain random item-
+                    [3] Sell an Item
+                    [4] Upgrade Bag space
+                    [5] Exit program
+                    __________________________________
+                    """);
 
-        switch (input.nextInt()) {
-            case 1:
-                if(player.inventoryEmpty()){
-                    System.out.println(player.inventoryEmpty());
-                } else {
-                    player.showInventory();
-                    System.out.println("To sort inventory press 1");
-                    System.out.println("To search for an item press 2");
-                    if (input.nextInt() == 1) {
-                        System.out.println("how would you like it sorted:"+"\n"+"alphabetical press 1:"+"\n"+"weight press 2:"+"\n"+"value press 3:");
+            switch (input.nextInt()) {
+                case 1:
+                    if (inventoryManager.inventoryEmpty()) {
+                        System.out.println(inventoryManager.inventoryEmpty());
+                    } else {
+                        inventoryManager.showInventory();
+                        System.out.println("""
+                                __________________________________
+                                ************ MENU [1] ************
+                                
+                                These are your options:
+                                [1] Sort Inventory
+                                [2] Search Inventory
+                                __________________________________
+                                """);
                         if (input.nextInt() == 1) {
-                            player.sortInventoryAlpha();
+                            System.out.println("""
+                                    __________________________________
+                                    ******** SUB MENU [1] [1] ********
+                                         - - Inventory Sorting - -
+                                    Select how Inventory is Sorted:
+                                    [1] Sort by Alphabetical Order
+                                    [2] Sort by Weight Value
+                                    [3] Sort by Item Value                                
+                                    """);
+
+                            switch (input.nextInt()){
+                                case 1:
+                                    System.out.println("Sorted Inventory by Alphabetical Order...");
+                                    inventoryManager.sortInventoryAlpha();
+                                    break;
+                                case 2:
+                                    System.out.println("Sorted Inventory by Weight Value...");
+                                    inventoryManager.sortInventoryWeight();
+                                    break;
+                                case 3:
+                                    System.out.println("Sorted Inventory by Item Value...");
+                                    inventoryManager.sortInventoryValue();
+                                    break;
+                            }
+                            inventoryManager.showInventory();
                         } else if (input.nextInt() == 2) {
-                            player.sortInventoryWeight();
-                        } else if (input.nextInt() == 3) {
-                            player.sortInventoryValue();
+                            System.out.println("""
+                                    __________________________________
+                                    ******** SUB MENU [1] [2] ********
+                                         - - Inventory Search - -
+                                    
+                                    Enter the name of the item you wish to search for
+                                    """);
+                            String userSearchInput = input.next();
+                            System.out.println("Searching inventory for " + userSearchInput + "...");
+                            inventoryManager.searchInventory(userSearchInput);
                         }
-                        player.showInventory();
-                    } else if (input.nextInt() == 2) {
-                        System.out.println("Please enter the name of the item you want to search for");
-                        String userSearchInput = input.next();
-                        player.searchInventory(userSearchInput);
                     }
-                }
-                break;
+                    break;
                 case 2:
 
                     break;
 
                 case 3:
+                    String itemToDelete = input.next();
+                    inventoryManager.removeFromInventory(itemToDelete);
 
                     break;
 
                 case 4:
-
+                    try {
+                        inventoryManager.upgradeInventory();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
 
                 case 5:
-                    System.out.println("Thank you come again:");
+                    System.out.println("""
+                            __________________________________
+                            ********** MENU SYSTEM **********
+                              - - - - SHUTTING DOWN - - - - 
+                            __________________________________
+                            """);
                     running = false;
-
                     break;
 
                 case 6:
@@ -66,7 +114,7 @@ public class MenuController {
                     break;
             }
         }
-       return running;
+        return running;
     }
 
 
