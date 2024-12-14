@@ -1,8 +1,11 @@
 package Model;
 
+import Controller.InventoryManager;
+
 public class Consumable extends Item {
     private int itemAmount;
     private boolean itemStackable;
+
     public Consumable() {
         super();
     }
@@ -89,7 +92,13 @@ public class Consumable extends Item {
 
     @Override
     public void useItem() {
-        super.useItem();
+        if (this.itemAmount == 0) {
+            System.out.println("Item has no charges");
+        } else if (this.itemAmount >= 1) {
+            super.useItem();
+            this.setItemAmount(this.getItemAmount() - 1);
+        }
+
     }
     //endregion
 

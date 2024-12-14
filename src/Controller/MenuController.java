@@ -14,7 +14,7 @@ public class MenuController {
 
     public boolean menu(boolean running) {
 
-        //scenarioManager.commnads
+        //scenarioManager.commands
 
         while (running) {
             System.out.println("""
@@ -146,11 +146,13 @@ public class MenuController {
                                 for (Item item : inventoryManager.showInventory()) {
 
                                     if (item ! instanceof Armor || item ! instanceof Weapon){
+                                        inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + searchedItem.getItem_value());
                                         inventoryManager.removeFromInventory(item.getItem_name());
                                     }
                                     else if (item instanceof Armor || item instanceof Weapon) {
 
                                         if (!((Armor) item).isEquipped() || !((Weapon) item).isEquipped()) {
+                                            inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + searchedItem.getItem_value());
                                             inventoryManager.removeFromInventory(item.getItem_name());
                                         } else {
                                             break;

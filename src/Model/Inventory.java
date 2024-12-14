@@ -24,23 +24,32 @@ public class Inventory {
         return containedInventoryMaxCapacity;
     }
 
-    public void setInventoryMaxCapacity(int inventoryMaxCapacity) {
-        containedInventoryMaxCapacity = inventoryMaxCapacity;
+    public int setInventoryMaxCapacity(int inventoryMaxCapacity) {
+        if (containedInventoryMaxCapacity != inventoryMaxCapacity) {
+            containedInventoryMaxCapacity = inventoryMaxCapacity;
+            return 1;
+        }
+            return 0;
     }
     //endregion
 
-    public boolean addItem(Item item) {
+    public int addItem(Item item) {
         if (containedItems.size() < containedInventoryMaxCapacity) {
             containedItems.add(item);
-            return true;
+            return 1;
         } else {
-            return false;
+            return 0;
         }
     }
 
-    public boolean removeItem(String itemName) {
-        return containedItems.remove(removeItem(itemName));
-    }// not sure why but I cannot make an else statement to include an error, guess we will have to do so when the method is called
+    public int removeItem(String itemName) {
+        if (findContainedItemByName(itemName) != -1) {
+            containedItems.remove(findContainedItemByName(itemName));
+            return 1;
+        }else{
+            return 0;
+        }
+    }
 
     public List<Item> getContainedItems() {
         listedInventory.clear();
@@ -49,18 +58,21 @@ public class Inventory {
         return listedInventory;
     }
 
-    public List<Item> findContainedItemByName(String searchedItemName) {
-        listedInventory = new ArrayList<>();
+    public int findContainedItemByName(String searchedItemName) {
         for (Item item : containedItems) {
             if (item.getItem_name().equals(searchedItemName)) {
-                listedInventory.add(item);
+                return containedItems.indexOf(item);
             }
         }
-        return listedInventory;
+        return -1;
     }
 
     public int getSize() {
-        return containedItems.size();
+        if (containedItems.size() <= containedInventoryMaxCapacity) {
+            return containedItems.size();
+        }else {
+            return -1;
+        }
     }
 
 

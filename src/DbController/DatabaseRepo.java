@@ -120,7 +120,6 @@ public class DatabaseRepo {
         String sql = "SELECT * FROM scenarios WHERE id = ?";
         scenario_Manager_list.clear();// clears list so it can be reused
 
-
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
@@ -215,11 +214,54 @@ public class DatabaseRepo {
         }
     }// createItem End
 
+
+    public Item itemBuilder(int buildItemID, String buildItemName, String buildItemType, String buildItemDescription, double buildItemWeight, double buildItemValue, boolean buildItemStackable) {
+        Item buildItem = null;
+        int itemID = buildItemID;
+        String itemName = buildItemName;
+        String itemType = buildItemType;
+        String itemDescription = buildItemDescription;
+        double itemWeight = buildItemWeight;
+        double itemValue = buildItemValue;
+        boolean itemStackable = buildItemStackable;
+
+        switch (itemType) {
+            case "Weapon":
+                buildItem = new Weapon(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1);
+                break;
+            case "Helmet":
+                buildItem = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
+                break;
+            case "Shoulder":
+                buildItem = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
+                break;
+            case "Chest":
+                buildItem = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
+                break;
+            case "Legs":
+                buildItem = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
+                break;
+            case "Boots":
+                buildItem = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
+                break;
+            case "Consumable":
+                buildItem = new Consumable(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1, itemStackable);
+                break;
+            case "Resource":
+                buildItem = new Ressource(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1, itemStackable);
+                break;
+        }
+
+        return buildItem;
+    }
+
+
     public Item readRandomItemFromDB() {
         String sql = "SELECT * FROM itemList ORDER BY RAND() LIMIT 1";
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
+
             Item item1 = null;
             int itemID = resultSet.getInt("itemID");
             String itemName = resultSet.getString("itemName");
@@ -229,34 +271,10 @@ public class DatabaseRepo {
             double itemValue = resultSet.getFloat("itemValue");
             boolean itemStackable = resultSet.getBoolean("itemStackable");
 
-            switch (itemType){
-                case "Weapon":
-                    item1 = new Weapon(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1);
-                    break;
-                case "Helmet":
-                    item1 = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
-                    break;
-                case "Shoulder":
-                    item1 = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
-                    break;
-                case "Chest":
-                    item1 = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
-                    break;
-                case "Legs":
-                    item1 = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
-                    break;
-                case "Boots":
-                    item1 = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
-                    break;
-                case "Consumable":
-                    item1 = new Consumable(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1, itemStackable);
-                    break;
-                case "Resource":
-                    item1 = new Ressource(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1, itemStackable);
-                    break;
-            }
+            item1 = itemBuilder(itemID, itemName, itemType, itemDescription, itemWeight, itemValue, itemStackable);
 
             return item1;
+
         } catch (SQLException e2) {
             e2.printStackTrace();
         } catch (Exception e) {
@@ -282,10 +300,13 @@ public class DatabaseRepo {
             double itemValue = resultSet.getFloat("itemValue");
             boolean itemStackable = resultSet.getBoolean("itemStackable");
 
+            Item item2 = itemBuilder(itemID, itemName, itemType, itemDescription, itemWeight, itemValue, itemStackable);
+
+            item_list.add(item2);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
 
         return item_list;
     }// readAllItems End
@@ -329,19 +350,82 @@ public class DatabaseRepo {
     //endregion
 
     //region Inventory Commands
-    public void createSavedInventory(Inventory inventory) {
+    public void createSavedInventory(Inventory savedinventory) {
+        String sql = "INSERT INTO Savedinventory (Fkitemid, Amount,) VALUES (?, ?,)";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
+            preparedStatement.setInt(1, inventory.getFkitemid());
+            preparedStatement.setInt(2, getAmount);
+
+            int rowsInserted = preparedStatement.executeUpdate():
+            if (rowsInserted > 0) {
+                System.out.println("Your inventory has been opdated");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void readSavedInventory() {
 
+    public List<Item> readSavedInventory() {
+        ArrayList<Item> inventoryFromDB = new ArrayList<>();
+        // skal lige finde ud af hvordan man får den til at read data fra et andet tabel
+
+        String sql = "SELECT * FROM Savedinventory";
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // get data from or DB
+
+        // Convert Data to a new Sql Query to call ItemList
+
+        // get data from itemlist DB
+
+        // build items from the data
+
+        // add items to the presumed empty inventory on system startup
+
+
+        return List.of();
     }
 
     public void updateSavedInventory(Inventory inventory) {
+        String sql = "UPDATE Savedinventory SET Fkitemid=?, Amount=?, WHERE id=?";
 
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, savedinventoreis.getFkitemid());
+            preparedStatement.setString(2, savedinventoreis.getAmount());
+
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("The inventory has been opdated");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void deleteSavedInventory() {}
+    public void deleteSavedInventory(int id) {
+        String sql = "DELETE FROM Savedinventory WHERE id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, id);
+            int rowsDeleted = preparedStatement.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("Item has been deleted from inventory");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     //endregion
 
 

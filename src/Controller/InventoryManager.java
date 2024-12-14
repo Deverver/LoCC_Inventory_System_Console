@@ -76,17 +76,32 @@ public class InventoryManager {
         return currentMaxCapacity;
     }
 
-    public void setCurrentMaxCapacity(int currentMaxCapacity) {
-        this.currentMaxCapacity = currentMaxCapacity;
+    public void setCurrentMaxCapacity(int WantedMaxCapacity) {
+        if (currentMaxCapacity != WantedMaxCapacity) {
+            if (inventory.setInventoryMaxCapacity(WantedMaxCapacity) == 1){
+                this.currentMaxCapacity = WantedMaxCapacity;
+            }
+        }
     }
     //endregion
 
-    public boolean addToInventory(Item item) {
-        return inventory.addItem(item);
+    public int addToInventory(Item item) {
+        if (item.getItem_weight() + this.getCurrentWeight() > this.getWeightLimit()) {
+            inventory.addItem(item);
+            refreshInventory();
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
-    public boolean removeFromInventory(String itemName) {
-        return inventory.removeItem(itemName);
+    public int removeFromInventory(String itemName) {
+        if (inventory.removeItem(itemName) == 1){
+            refreshInventory();
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public List<Item> showInventory() {
@@ -117,8 +132,9 @@ public class InventoryManager {
     public boolean inventoryFull() {
         if (inventory.getSize() == inventory.getContainedInventoryMaxCapacity()) {
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public boolean inventoryEmpty() {
@@ -128,16 +144,22 @@ public class InventoryManager {
         return false;
     }
 
-
     public int upgradeInventory() {
         if (inventory.getContainedInventoryMaxCapacity() <= absoluteMaxCapacity - upgradeValue) {
             inventory.setInventoryMaxCapacity(inventory.getContainedInventoryMaxCapacity() + upgradeValue);
+            setCurrentMaxCapacity(inventory.getContainedInventoryMaxCapacity());
             return 1;
+        }else {
+            return 0;
         }
-        return 0;
     }
 
     public void refreshInventory() {
+        double updatedWeight = 0;
+        for (Item item : inventory.getContainedItems()) {
+            updatedWeight += item.getItem_weight();
+        }
+        setCurrentWeight(updatedWeight);
         setRemainingWeightCapacity(getWeightLimit() - getCurrentWeight());
     }
 
