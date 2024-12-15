@@ -4,14 +4,13 @@ public class Armor extends Item {
     private boolean IsEquipped;
 
 
-
     public Armor() {
         super();
     }
+
     public Armor(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value) {
         super(item_id, item_type, item_name, item_description, item_weight, item_value);
     }
-
 
 
     //region Getters & Setters

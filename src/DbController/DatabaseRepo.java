@@ -181,10 +181,10 @@ public class DatabaseRepo {
                 String scenario_name = resultSet.getString("scenarioName");
                 String scenario_description = resultSet.getString("scenarioDescription");
 
-                returnedScenarioManager = new ScenarioManager(primaryKey, scenario_type, scenario_name, scenario_description);
+                scenario_Manager_list.add(new ScenarioManager(primaryKey, scenario_type, scenario_name, scenario_description));
 
             }
-            return returnedScenarioManager;
+            return (ScenarioManager) scenario_Manager_list;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -358,7 +358,7 @@ public class DatabaseRepo {
             preparedStatement.setInt(1, inventory.getFkitemid());
             preparedStatement.setInt(2, getAmount);
 
-            int rowsInserted = preparedStatement.executeUpdate():
+            int rowsInserted = preparedStatement.executeUpdate();
             if (rowsInserted > 0) {
                 System.out.println("Your inventory has been opdated");
             }
@@ -372,10 +372,14 @@ public class DatabaseRepo {
         ArrayList<Item> inventoryFromDB = new ArrayList<>();
         // skal lige finde ud af hvordan man får den til at read data fra et andet tabel
 
-        String sql = "SELECT * FROM Savedinventory";
+        String sql = "SELECT * FROM Savedinventory,Itemlist WHERE ID = itemID ";
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
+
+            while (resultSet.next()) {
+
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -399,9 +403,10 @@ public class DatabaseRepo {
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            /*
             preparedStatement.setInt(1, savedinventoreis.getFkitemid());
             preparedStatement.setString(2, savedinventoreis.getAmount());
-
+            */
 
             int rowsUpdated = preparedStatement.executeUpdate();
             if (rowsUpdated > 0) {

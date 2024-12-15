@@ -1,9 +1,6 @@
 package Controller;
 
-import DbController.DatabaseRepo;
-import Model.Armor;
-import Model.Item;
-import Model.Weapon;
+import Model.*;
 
 import java.util.Scanner;
 
@@ -142,74 +139,63 @@ public class MenuController {
                                     Are you sure you wish to do this?
                                                (YES / NO)
                                     """);
-                            if (input.next().toLowerCase().equals("yes")) {
+                            if (input.next().toLowerCase().trim().equals("yes")) {
                                 for (Item item : inventoryManager.showInventory()) {
 
-                                    if (item ! instanceof Armor || item ! instanceof Weapon){
-                                        inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + searchedItem.getItem_value());
+                                    if (item instanceof Consumable || item instanceof Ressource) {
+                                        inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + item.getItem_value());
                                         inventoryManager.removeFromInventory(item.getItem_name());
-                                    }
-                                    else if (item instanceof Armor || item instanceof Weapon) {
+                                    } else if (item instanceof Armor || item instanceof Weapon) {
 
-                                        if (!((Armor) item).isEquipped() || !((Weapon) item).isEquipped()) {
-                                            inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + searchedItem.getItem_value());
+                                        if (!((Armor) item).isEquipped()) {
+                                            inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + item.getItem_value());
                                             inventoryManager.removeFromInventory(item.getItem_name());
-                                        } else {
-                                            break;
+                                        } else if (!((Weapon) item).isEquipped()) {
+                                            inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + item.getItem_value());
+                                            inventoryManager.removeFromInventory(item.getItem_name());
                                         }
                                     }
                                 }
                             }
                             break;
-                        default:
-                            throw new IllegalStateException("Unexpected value: " + input.nextInt());
-                    } else{
+
+                    }
+                case 4:
+                    System.out.println("""
+                            __________________________________
+                            ************ MENU [4] ************
+                            
+                            These are your options:
+                            [1] Upgrade Inventory Capacity
+                            """);
+                    switch (input.nextInt()) {
+                        case 1:
+                            System.out.println("Upgrading Inventory Capacity...");
+                            try {
+                                inventoryManager.upgradeInventory();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                    }
+                case 5:
+                    System.out.println("""
+                            __________________________________
+                            ********** MENU SYSTEM **********
+                              - - - - SHUTTING DOWN - - - -
+                            __________________________________
+                            """);
+                    running = false;
+
                     break;
-                }
-                break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + input.nextInt());
+
             }
-            break;
-            // Case 3 End
-            case 4:
-                System.out.println("""
-                        __________________________________
-                        ************ MENU [4] ************
-                        
-                        These are your options:
-                        [1] Upgrade Inventory Capacity
-                        """);
-                switch (input.nextInt()) {
-                    case 1:
-                        System.out.println("Upgrading Inventory Capacity...");
-                        try {
-                            inventoryManager.upgradeInventory();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        break;
+        }// main Switch case
 
-                    case 5:
-                        System.out.println("""
-                                __________________________________
-                                ********** MENU SYSTEM **********
-                                  - - - - SHUTTING DOWN - - - -
-                                __________________________________
-                                """);
-                        running = false;
-                        break;
-
-                    case 6:
-
-                        break;
-                }
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + input.nextInt());
-        }// Main Switch case
         return running;
-    }// While Loop
+    }
+
+}
 
 
-}// MenuController End
+// MenuController End

@@ -8,6 +8,10 @@ public class Main {
     public static void main(String[] args) {
         MenuController menuController = new MenuController();
 
+        // in theory,
+
+
+
         try {
             DatabaseConnection.createFiles();
             ScenarioManager.createScenarioFiles();

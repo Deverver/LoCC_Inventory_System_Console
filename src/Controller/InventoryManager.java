@@ -78,7 +78,7 @@ public class InventoryManager {
 
     public void setCurrentMaxCapacity(int WantedMaxCapacity) {
         if (currentMaxCapacity != WantedMaxCapacity) {
-            if (inventory.setInventoryMaxCapacity(WantedMaxCapacity) == 1){
+            if (inventory.setInventoryMaxCapacity(WantedMaxCapacity) == 1) {
                 this.currentMaxCapacity = WantedMaxCapacity;
             }
         }
@@ -96,7 +96,7 @@ public class InventoryManager {
     }
 
     public int removeFromInventory(String itemName) {
-        if (inventory.removeItem(itemName) == 1){
+        if (inventory.removeItem(itemName) == 1) {
             refreshInventory();
             return 1;
         } else {
@@ -149,7 +149,7 @@ public class InventoryManager {
             inventory.setInventoryMaxCapacity(inventory.getContainedInventoryMaxCapacity() + upgradeValue);
             setCurrentMaxCapacity(inventory.getContainedInventoryMaxCapacity());
             return 1;
-        }else {
+        } else {
             return 0;
         }
     }
