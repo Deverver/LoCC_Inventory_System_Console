@@ -1,5 +1,6 @@
 package DbController;
 
+import Controller.Savedinventory;
 import Controller.ScenarioManager;
 import Model.*;
 
@@ -13,13 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseRepo {
-    public List<ScenarioManager> scenario_Manager_list = new ArrayList<>();
     public List<Item> item_list = new ArrayList<>();
 
     //region Scenario Commands
     public static void uploadToScenarios() {
         String filePath = "scenario_data";
-        String sql = "INSERT INTO scenarios (scenarioType, scenarioName, scenarioDescription) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO scenariolist(scenarioType, scenarioName, scenarioDescription) VALUES (?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
              BufferedReader reader1 = new BufferedReader(new FileReader(filePath));
@@ -55,7 +55,7 @@ public class DatabaseRepo {
     public void createScenario(ScenarioManager scenarioManager) {
         // In order to transfer data to the DB we have to make our object readable to MySQL
         // We do this by choosing where our object data goes in our SQL Query
-        String sql = "INSERT INTO scenarios (scenario_type, scenario_name, scenario_description) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO scenariolist (scenario_type, scenario_name, scenario_description) VALUES (?, ?, ?)";
 
 
         // In order to do anything in our DB we have to make a connection
@@ -79,7 +79,7 @@ public class DatabaseRepo {
 
     public void updateScenario(ScenarioManager scenarioManager, int DBIndex) {
         // In order to update in the DB, we have to provide and SET new data, and choose WHERE it goes
-        String sql = "UPDATE scenarios SET scenario_type = ?, scenario_name = ?, scenario_description = ?, WHERE id = " + DBIndex;
+        String sql = "UPDATE scenariolist SET scenario_type = ?, scenario_name = ?, scenario_description = ?, WHERE id = " + DBIndex;
 
         // We have to make a new connection to our DB
         try (Connection connection = DatabaseConnection.getConnection();
@@ -100,7 +100,7 @@ public class DatabaseRepo {
 
     // Same as updating we have to choose which game to delete via ID
     public void deleteScenario(int DBIndex) {
-        String sql = "DELETE FROM scenarios WHERE id = ?";
+        String sql = "DELETE FROM scenariolist WHERE id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -116,32 +116,12 @@ public class DatabaseRepo {
         }
     }// deleteScenario End
 
-    public List<ScenarioManager> readScenario(int DBIndex) {
-        String sql = "SELECT * FROM scenarios WHERE id = ?";
-        scenario_Manager_list.clear();// clears list so it can be reused
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
-
-            System.out.println("Reading scenario...");
-
-            int primaryKey = resultSet.getInt("id");
-            String scenario_type = resultSet.getString("scenarioType");
-            String scenario_name = resultSet.getString("scenarioName");
-            String scenario_description = resultSet.getString("scenarioDescription");
-
-            scenario_Manager_list.add(new ScenarioManager(primaryKey, scenario_type, scenario_name, scenario_description));
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return scenario_Manager_list;
-    }// readScenario End
 
     public List<ScenarioManager> readALLScenarios() {
-        String sql = "SELECT * FROM scenarios";
-        scenario_Manager_list.clear();// clears list so it can be reused
+        List<ScenarioManager> scenarios = new ArrayList<>();
+        String sql = "SELECT * FROM scenariolist";
+
       /*
       The reason we use a Statement is in order to transfer the read data from the DB into a result-set
       that we can read from separately.
@@ -158,17 +138,19 @@ public class DatabaseRepo {
                 String scenario_name = resultSet.getString("scenarioName");
                 String scenario_description = resultSet.getString("scenarioDescription");
 
-                scenario_Manager_list.add(new ScenarioManager(primaryKey, scenario_type, scenario_name, scenario_description));
+
             }// WLoop End
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return scenario_Manager_list;
+        return scenarios;
+
     }// readScenario End
 
-    public ScenarioManager readRandomScenarioFromDB() throws SQLException {
-        String sql = "SELECT * FROM scenarios ORDER BY RAND() LIMIT 1";
-        scenario_Manager_list.clear();
+    public List<ScenarioManager> readRandomScenarioFromDB() throws SQLException {
+        List<ScenarioManager> scenarios = new ArrayList<>();
+        String sql = "SELECT * FROM scenariolist ORDER BY RAND() LIMIT 1";
+
 
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
@@ -181,14 +163,12 @@ public class DatabaseRepo {
                 String scenario_name = resultSet.getString("scenarioName");
                 String scenario_description = resultSet.getString("scenarioDescription");
 
-                scenario_Manager_list.add(new ScenarioManager(primaryKey, scenario_type, scenario_name, scenario_description));
-
             }
-            return (ScenarioManager) scenario_Manager_list;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return scenarios;
     }
     //endregion
 
@@ -350,13 +330,13 @@ public class DatabaseRepo {
     //endregion
 
     //region Inventory Commands
-    public void createSavedInventory(Inventory savedinventory) {
+    public void createSavedInventory(Savedinventory savedinventory) {
         String sql = "INSERT INTO Savedinventory (Fkitemid, Amount,) VALUES (?, ?,)";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setInt(1, inventory.getFkitemid());
-            preparedStatement.setInt(2, getAmount);
+            preparedStatement.setInt(1, savedinventory.getAmount());
+            preparedStatement.setInt(2, savedinventory.getFKitemid());
 
             int rowsInserted = preparedStatement.executeUpdate();
             if (rowsInserted > 0) {
@@ -369,16 +349,20 @@ public class DatabaseRepo {
 
 
     public List<Item> readSavedInventory() {
-        ArrayList<Item> inventoryFromDB = new ArrayList<>();
-        // skal lige finde ud af hvordan man får den til at read data fra et andet tabel
-
-        String sql = "SELECT * FROM Savedinventory,Itemlist WHERE ID = itemID ";
+        List<Savedinventory> savedinventories = new ArrayList<>();
+        String sql = "SELECT  amount, itemName, itemType, itemDescription, itemWeight, itemValue FROM Savedinventory,Itemlist WHERE ID = itemID ";
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
-
+                String amount = resultSet.getString("amount");
+                String itemName = resultSet.getString("itemName");
+                String itemType = resultSet.getString("itemType");
+                String itemDescription = resultSet.getString("itemDescription");
+                double itemWeight = resultSet.getFloat("itemWeight");
+                double itemValue = resultSet.getFloat("itemValue");
+                boolean itemStackable = resultSet.getBoolean("itemStackable");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -398,15 +382,15 @@ public class DatabaseRepo {
         return List.of();
     }
 
-    public void updateSavedInventory(Inventory inventory) {
+    public void updateSavedInventory(Savedinventory savedinventory) {
         String sql = "UPDATE Savedinventory SET Fkitemid=?, Amount=?, WHERE id=?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            /*
-            preparedStatement.setInt(1, savedinventoreis.getFkitemid());
-            preparedStatement.setString(2, savedinventoreis.getAmount());
-            */
+
+            preparedStatement.setInt(1, savedinventory.getFKitemid());
+            preparedStatement.setInt(2, savedinventory.getAmount());
+
 
             int rowsUpdated = preparedStatement.executeUpdate();
             if (rowsUpdated > 0) {

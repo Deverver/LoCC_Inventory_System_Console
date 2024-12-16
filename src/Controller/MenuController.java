@@ -1,13 +1,16 @@
 package Controller;
 
+import DbController.DatabaseRepo;
 import Model.*;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuController {
     private Scanner input = new Scanner(System.in);
     private final InventoryManager inventoryManager = new InventoryManager();
     private final ScenarioManager scenarioManager = new ScenarioManager();
+    private final DatabaseRepo database = new DatabaseRepo();
 
     public boolean menu(boolean running) {
 
@@ -102,7 +105,9 @@ public class MenuController {
                         //scenarioManager.playScenario();
                         break;
                     } else if (input.nextInt() == 2) {
-                        System.out.println("Displaying All Possible Scenarios...");
+                        System.out.println("Displaying All Possible Scenarios.../n");
+                        List<ScenarioManager> scenarios =database.readALLScenarios();
+                        scenarios.forEach(System.out::println);
                         break;
                     }
                     break;
