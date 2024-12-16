@@ -5,8 +5,10 @@ import Model.Item;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ScenarioManager {
+    DatabaseRepo databaseRepo = new DatabaseRepo();
     private int scenario_id;
     private String scenario_type;
     private String scenario_name;
@@ -66,6 +68,7 @@ public class ScenarioManager {
         } else {
             System.out.println("Files Already Exists");
         }
+
     }
     /*
     public ScenarioManager createScenario() {
@@ -79,17 +82,18 @@ public class ScenarioManager {
         DatabaseRepo.readScenario();
 
     }
+    */
 
-    public Item playScenario() {
+    public Item playScenario() throws SQLException {
         // Scenario is supposed to create a random item, that will be displayed in its description
         Item randomItem;
-        randomItem = DatabaseRepo.readRandomItemFromDB();
+        randomItem = databaseRepo.readRandomItemFromDB();
+        databaseRepo.readRandomScenarioFromDB();
 
-        createScenario();
+        //createScenario();
         //update scenario with Item
-        showScenarioInfo();
         return randomItem;
     }
-    */
+
 
 }// End

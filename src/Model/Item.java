@@ -23,8 +23,17 @@ private double item_weight;
 private double item_value;
 
 
+
     public Item() {}// Empty constructor
     public Item(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value) {
+        this.item_id = item_id;
+        this.item_type = item_type;
+        this.item_name = item_name;
+        this.item_description = item_description;
+        this.item_weight = item_weight;
+        this.item_value = item_value;
+    }
+    public Item(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value, int item_amount) {
         this.item_id = item_id;
         this.item_type = item_type;
         this.item_name = item_name;

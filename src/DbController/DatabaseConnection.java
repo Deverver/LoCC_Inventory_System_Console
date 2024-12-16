@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/Locc";
+    private static final String URL = "jdbc:mysql://localhost:3306/LoCC";
 
     private static String USER = "";
     private static String PASSWORD = "";
@@ -15,10 +15,13 @@ public class DatabaseConnection {
     public static Connection getConnection() {
 
         try {
+            getLogin();
             return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }// Connection End
 
@@ -48,5 +51,5 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
     }
-
 }
+

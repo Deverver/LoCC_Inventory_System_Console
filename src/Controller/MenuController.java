@@ -3,6 +3,8 @@ package Controller;
 import DbController.DatabaseRepo;
 import Model.*;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -34,10 +36,9 @@ public class MenuController {
                     if (inventoryManager.inventoryEmpty()) {
                         System.out.println(inventoryManager.inventoryEmpty());
                     } else {
-                        inventoryManager.showInventory();
                         int itemSlot = 1;
                         for (Item item : inventoryManager.showInventory()) {
-                            System.out.println("Inventory space " + itemSlot + " contains " + item);
+                            System.out.println("Inventory space " + itemSlot + " contains " + item.getItem_type() + " " + item.getItem_name());
                             itemSlot++;
                         }// loop
 
@@ -64,14 +65,29 @@ public class MenuController {
                                 case 1:
                                     System.out.println("Sorted Inventory by Alphabetical Order...");
                                     inventoryManager.sortInventoryAlpha();
+                                    itemSlot = 1;
+                                    for (Item item : inventoryManager.showInventory()) {
+                                        System.out.println("Inventory space " + itemSlot + " contains " + item.getItem_type() + " " + item.getItem_name());
+                                        itemSlot++;
+                                    }
                                     break;
                                 case 2:
                                     System.out.println("Sorted Inventory by Weight Value...");
                                     inventoryManager.sortInventoryWeight();
+                                    itemSlot = 1;
+                                    for (Item item : inventoryManager.showInventory()) {
+                                        System.out.println("Inventory space " + itemSlot + " contains " + item.getItem_type() + " " + item.getItem_name());
+                                        itemSlot++;
+                                    }
                                     break;
                                 case 3:
                                     System.out.println("Sorted Inventory by Item Value...");
                                     inventoryManager.sortInventoryValue();
+                                    itemSlot = 1;
+                                    for (Item item : inventoryManager.showInventory()) {
+                                        System.out.println("Inventory space " + itemSlot + " contains " + item.getItem_type() + " " + item.getItem_name());
+                                        itemSlot++;
+                                    }
                                     break;
                             }// Sub Switch case
                             inventoryManager.showInventory();
@@ -102,12 +118,38 @@ public class MenuController {
 
                     if (input.nextInt() == 1) {
                         System.out.println("Playing Random Scenario...");
-                        //scenarioManager.playScenario();
+                        Item item = null;
+                        try {
+                            item = scenarioManager.playScenario();
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                        System.out.println(item.getItem_name() +" "+ item.getItem_type() +" "+ item.getItem_description());
+                        System.out.println("""
+                            __________________________________
+                            ************ MENU [2] [1] ************
+                            
+                            These are your options:
+                            [1] keep item
+                            [2] discard item
+                            """);
+                        if (input.nextInt() == 1) {
+                            inventoryManager.addToInventory(item);
+                        } else {
+                            break;
+                        }
+
                         break;
                     } else if (input.nextInt() == 2) {
                         System.out.println("Displaying All Possible Scenarios.../n");
-                        List<ScenarioManager> scenarios =database.readALLScenarios();
-                        scenarios.forEach(System.out::println);
+                        List<ScenarioManager> scenarios = database.readALLScenarios();
+                        for(ScenarioManager scenario : scenarios) {
+                            System.out.println(scenario.getScenario_name());
+                            System.out.println(scenario.getScenario_type());
+                            System.out.println(scenario.getScenario_description());
+                        }
+
+
                         break;
                     }
                     break;
@@ -190,8 +232,8 @@ public class MenuController {
                               - - - - SHUTTING DOWN - - - -
                             __________________________________
                             """);
-                    running = false;
 
+                    running = false;
                     break;
 
             }

@@ -4,16 +4,14 @@ import Controller.InventoryManager;
 
 public class Consumable extends Item {
     private int itemAmount;
-    private boolean itemStackable;
 
     public Consumable() {
         super();
     }
 
-    public Consumable(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value, int itemAmount, boolean itemStackable) {
+    public Consumable(int item_id, String item_type, String item_name, String item_description, double item_weight, double item_value, int itemAmount) {
         super(item_id, item_type, item_name, item_description, item_weight, item_value);
         this.itemAmount = itemAmount;
-        this.itemStackable = itemStackable;
     }
 
     //region Getters & Setters

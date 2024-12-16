@@ -1,5 +1,6 @@
 package Controller;
 
+import DbController.DatabaseRepo;
 import Model.Inventory;
 import Model.Item;
 
@@ -86,7 +87,7 @@ public class InventoryManager {
     //endregion
 
     public int addToInventory(Item item) {
-        if (item.getItem_weight() + this.getCurrentWeight() > this.getWeightLimit()) {
+        if (item.getItem_weight() + getCurrentWeight() < getWeightLimit()) {
             inventory.addItem(item);
             refreshInventory();
             return 1;
@@ -105,6 +106,7 @@ public class InventoryManager {
     }
 
     public List<Item> showInventory() {
+
         return inventory.getContainedItems();
     }
 
@@ -162,6 +164,9 @@ public class InventoryManager {
         setCurrentWeight(updatedWeight);
         setRemainingWeightCapacity(getWeightLimit() - getCurrentWeight());
     }
+public void saveInventory() {
 
+        inventory.createSavedInventory();
+}
 
 }// InventoryManager End
