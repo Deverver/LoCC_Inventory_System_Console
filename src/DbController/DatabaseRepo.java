@@ -1,6 +1,7 @@
 package DbController;
 
 import Controller.InventoryManager;
+import Controller.SavedInventory;
 import Controller.ScenarioManager;
 import Model.*;
 
@@ -226,10 +227,10 @@ public class DatabaseRepo {
                 buildItem = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
                 break;
             case "Consumable":
-                buildItem = new Consumable(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1, itemStackable);
+                buildItem = new Consumable(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1);
                 break;
             case "Resource":
-                buildItem = new Ressource(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1, itemStackable);
+                buildItem = new Ressource(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1);
                 break;
         }
 
@@ -261,10 +262,10 @@ public class DatabaseRepo {
                     buildItem = new Armor(itemID, itemType, itemName, itemDescription, itemWeight, itemValue);
                     break;
                 case "Consumable":
-                    buildItem = new Consumable(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1, itemStackable);
+                    buildItem = new Consumable(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1);
                     break;
                 case "Resource":
-                    buildItem = new Ressource(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1, itemStackable);
+                    buildItem = new Ressource(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1);
                     break;
             }
             return buildItem;
@@ -341,14 +342,14 @@ public class DatabaseRepo {
         //endregion
 
         //region Inventory Commands
-        public void createSavedInventory (Savedinventory savedinventory){
+        public void createSavedInventory (ArrayList<SavedInventory> savedInv){
             String sql = "INSERT INTO Savedinventory (Fkitemid, Amount,) VALUES (?, ?,)";
             try (Connection connection = DatabaseConnection.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-                preparedStatement.setInt(1, savedinventory.getAmount());
-                preparedStatement.setInt(2, savedinventory.getFKitemid());
-
+                for(SavedInventory savedInventory : savedInv) {
+                    preparedStatement.setInt(1, savedInventory.getAmount());
+                    preparedStatement.setInt(2, savedInventory.getFk());
+                }
                 int rowsInserted = preparedStatement.executeUpdate();
                 if (rowsInserted > 0) {
                     System.out.println("Your inventory has been opdated");
@@ -360,7 +361,7 @@ public class DatabaseRepo {
 
 
         public List<Item> readSavedInventory () {
-            List<Savedinventory> savedinventories = new ArrayList<>();
+            List<SavedInventory> savedinventories = new ArrayList<>();
             String sql = "SELECT  amount, itemName, itemType, itemDescription, itemWeight, itemValue FROM Savedinventory,Itemlist WHERE ID = itemID ";
             try (Connection connection = DatabaseConnection.getConnection();
                  Statement statement = connection.createStatement();
@@ -393,13 +394,13 @@ public class DatabaseRepo {
             return List.of();
         }
 
-        public void updateSavedInventory (Savedinventory savedinventory){
+        public void updateSavedInventory (SavedInventory savedinventory){
             String sql = "UPDATE Savedinventory SET Fkitemid=?, Amount=?, WHERE id=?";
 
             try (Connection connection = DatabaseConnection.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-                preparedStatement.setInt(1, savedinventory.getFKitemid());
+                preparedStatement.setInt(1, savedinventory.getFk());
                 preparedStatement.setInt(2, savedinventory.getAmount());
 
 
@@ -412,7 +413,7 @@ public class DatabaseRepo {
             }
         }
 
-        public void deleteSavedInventory ( int id){
+        public void deleteSavedInventory (int id){
             String sql = "DELETE FROM Savedinventory WHERE id = ?";
             try (Connection connection = DatabaseConnection.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

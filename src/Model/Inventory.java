@@ -89,8 +89,9 @@ public class Inventory {
     }
     public ArrayList<SavedInventory> createSavedInventory(){
         ArrayList<SavedInventory> savedInventory = new ArrayList<>();
-        int itemCount = 1;
+
         for (Item item : containedItems) {
+            int itemCount = 1;
             if(item.getItem_type().equals("Consumable")){
                 itemCount = ((Consumable)item).getItemAmount();
             } else if (item.getItem_type().equals("Resource")) {

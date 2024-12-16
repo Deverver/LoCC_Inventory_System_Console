@@ -38,7 +38,13 @@ public class MenuController {
                     } else {
                         int itemSlot = 1;
                         for (Item item : inventoryManager.showInventory()) {
-                            System.out.println("Inventory space " + itemSlot + " contains " + item.getItem_type() + " " + item.getItem_name());
+                            if (item.getItem_type().equals("Consumable")) {
+                                System.out.println("Inventory space " + itemSlot + " contains " + item.getItem_type() + " " + item.getItem_name() + " " + ((Consumable) item).getItemAmount());
+                            } else if (item.getItem_type().equals("Resource")) {
+                                System.out.println("Inventory space " + itemSlot + " contains " + item.getItem_type() + " " + item.getItem_name() + " " + ((Ressource) item).getItemAmount());
+                            } else {
+                                System.out.println("Inventory space " + itemSlot + " contains " + item.getItem_type() + " " + item.getItem_name());
+                            }
                             itemSlot++;
                         }// loop
 
@@ -124,15 +130,15 @@ public class MenuController {
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
-                        System.out.println(item.getItem_name() +" "+ item.getItem_type() +" "+ item.getItem_description());
+                        System.out.println(item.getItem_name() + " " + item.getItem_type() + " " + item.getItem_description());
                         System.out.println("""
-                            __________________________________
-                            ************ MENU [2] [1] ************
-                            
-                            These are your options:
-                            [1] keep item
-                            [2] discard item
-                            """);
+                                __________________________________
+                                ************ MENU [2] [1] ************
+                                
+                                These are your options:
+                                [1] keep item
+                                [2] discard item
+                                """);
                         if (input.nextInt() == 1) {
                             inventoryManager.addToInventory(item);
                         } else {
@@ -143,7 +149,7 @@ public class MenuController {
                     } else if (input.nextInt() == 2) {
                         System.out.println("Displaying All Possible Scenarios.../n");
                         List<ScenarioManager> scenarios = database.readALLScenarios();
-                        for(ScenarioManager scenario : scenarios) {
+                        for (ScenarioManager scenario : scenarios) {
                             System.out.println(scenario.getScenario_name());
                             System.out.println(scenario.getScenario_type());
                             System.out.println(scenario.getScenario_description());
@@ -175,6 +181,7 @@ public class MenuController {
                             String itemToDelete = input.next();
                             Item searchedItem = inventoryManager.searchInventory(itemToDelete);
                             inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + searchedItem.getItem_value());
+                            database.deleteSavedInventory(inventoryManager.searchInventory(itemToDelete).getItem_id());
                             inventoryManager.removeFromInventory(itemToDelete);
                             break;
                         case 2:
