@@ -84,15 +84,19 @@ public class ScenarioManager {
     }
     */
 
-    public Item playScenario() throws SQLException {
+    public Item getItem() throws SQLException {
         // Scenario is supposed to create a random item, that will be displayed in its description
         Item randomItem;
         randomItem = databaseRepo.readRandomItemFromDB();
         databaseRepo.readRandomScenarioFromDB();
-
         //createScenario();
         //update scenario with Item
         return randomItem;
+    }
+    public ScenarioManager readScenario() throws SQLException {
+        ScenarioManager scenarioManager;
+        scenarioManager = databaseRepo.readRandomScenarioFromDB();
+        return null;
     }
 
 

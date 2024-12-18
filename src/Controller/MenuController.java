@@ -4,7 +4,6 @@ import DbController.DatabaseRepo;
 import Model.*;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -125,8 +124,11 @@ public class MenuController {
                     if (input.nextInt() == 1) {
                         System.out.println("Playing Random Scenario...");
                         Item item = null;
+                        ScenarioManager scenario = null;
                         try {
-                            item = scenarioManager.playScenario();
+                            scenario = scenarioManager.readScenario();
+                            System.out.println(scenario.getScenario_description());
+                            item = scenarioManager.getItem();
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
