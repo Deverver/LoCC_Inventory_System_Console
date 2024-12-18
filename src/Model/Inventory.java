@@ -33,24 +33,39 @@ public class Inventory {
             return 0;
     }
     //endregion
-
     public int addItem(Item item) {
-        if(containedItems.contains(item) && item.getItem_type().equals("Consumable")){
-            ((Consumable)item).setItemAmount(+1);
-            item.setItem_weight(item.getItem_weight() + item.getItem_weight());
-        } else if (containedItems.contains(item) && item.getItem_type().equals("Resource")){
-            ((Ressource)item).setItemAmount(+1);
-            item.setItem_weight(item.getItem_weight() + item.getItem_weight());
+        // Check if item already exists in the Inventory
+        int existingItemIndex = findContainedItemByName(item.getItem_name());
+        if (existingItemIndex != -1) { // Item already exists
+            Item existingItem = containedItems.get(existingItemIndex);
+
+            // Handle Consumable type
+            if (item instanceof Consumable) {
+                Consumable consumableItem = (Consumable) existingItem;
+                consumableItem.setItemAmount(consumableItem.getItemAmount() + 1);
+                return 1;
+            }
+
+            // Handle Resource type
+            if (item instanceof Ressource) {
+                Ressource resourceItem = (Ressource) existingItem;
+                resourceItem.setItemAmount(resourceItem.getItemAmount() + 1);
+                return 1;
+            }
+
+            // If item is neither Consumable nor Resource, we won't add duplicates
+            return 0;
         }
 
+        // If the inventory has space, add the new item
         if (containedItems.size() < containedInventoryMaxCapacity) {
             containedItems.add(item);
             return 1;
-        } else {
-            return 0;
         }
-    }
 
+        // If the inventory has no space, reject the item
+        return 0;
+    }
     public int removeItem(String itemName) {
         if (findContainedItemByName(itemName) != -1) {
             containedItems.remove(findContainedItemByName(itemName));

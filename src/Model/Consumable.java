@@ -96,7 +96,6 @@ public class Consumable extends Item {
             super.useItem();
             this.setItemAmount(this.getItemAmount() - 1);
         }
-
     }
     //endregion
 
