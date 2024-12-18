@@ -17,7 +17,7 @@ Which is for the item to be displayed/shown and for the Item to be used.
  */
 public interface ItemAction {
 
-    void showItemInfo();
+    String showItemInfo();
 
     void useItem();
 

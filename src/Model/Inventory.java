@@ -35,7 +35,6 @@ public class Inventory {
     //endregion
 
     public int addItem(Item item) {
-        System.out.println("whee");
         if(containedItems.contains(item) && item.getItem_type().equals("Consumable")){
             ((Consumable)item).setItemAmount(+1);
             item.setItem_weight(item.getItem_weight() + item.getItem_weight());

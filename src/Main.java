@@ -14,7 +14,6 @@ public class Main {
 
         try {
             DatabaseConnection.createFiles();
-            ScenarioManager.createScenarioFiles();
         } catch (IOException e2) {
             throw new RuntimeException(e2.getMessage());
         } catch (Exception e3) {

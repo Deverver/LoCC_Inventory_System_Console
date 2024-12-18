@@ -84,8 +84,8 @@ public class Consumable extends Item {
     }
 
     @Override
-    public void showItemInfo() {
-        super.showItemInfo();
+    public String showItemInfo() {
+        return super.showItemInfo();
     }
 
     @Override

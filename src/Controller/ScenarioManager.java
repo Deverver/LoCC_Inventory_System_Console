@@ -56,6 +56,7 @@ public class ScenarioManager {
     }
     //endregion
 
+    // Made to create specific files for both items and scenarios if we chose to upload via files
     public static void createScenarioFiles() throws IOException {
         File file3 = new File("scenario_data");
         File file4 = new File("item_data");
@@ -83,12 +84,11 @@ public class ScenarioManager {
 
     }
     */
-
     public Item getItem() throws SQLException {
         // Scenario is supposed to create a random item, that will be displayed in its description
         Item randomItem;
         randomItem = databaseRepo.readRandomItemFromDB();
-        databaseRepo.readRandomScenarioFromDB();
+
         //createScenario();
         //update scenario with Item
         return randomItem;
@@ -96,8 +96,13 @@ public class ScenarioManager {
     public ScenarioManager readScenario() throws SQLException {
         ScenarioManager scenarioManager;
         scenarioManager = databaseRepo.readRandomScenarioFromDB();
-        return null;
+        return scenarioManager;
     }
 
-
+    @Override
+    public String toString() {
+        String scenarioMessage =
+                ("________________________\n" + this.getScenario_name() + "\n________________________\n" + this.getScenario_type() + "\n" + this.getScenario_description() + ".");
+        return scenarioMessage;
+    }
 }// End

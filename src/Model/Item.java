@@ -93,19 +93,16 @@ private double item_value;
     //endregion
 
 
-    public void showItemInfo() {
-        System.out.println("________________________");
-        System.out.println(this.getItem_name() +", " + this.getItem_type()+ ".");
-        System.out.println("________________________");
-        System.out.println(this.getItem_description());
-        System.out.println("________________________");
+    public String showItemInfo() {
+        String itemMessage;
+        itemMessage = ("________________________\n" + this.getItem_name() + "\n________________________\n" + this.getItem_type() + "\n" + this.getItem_description() + ".");
+        return itemMessage;
     }
 
 
     public void useItem(){
         System.out.println("________________________");
         System.out.println("You used the " + this.getItem_type() + ", " + this.getItem_name() + ".");
-        System.out.println("________________________");
     }
 
 

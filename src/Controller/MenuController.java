@@ -127,12 +127,12 @@ public class MenuController {
                         ScenarioManager scenario = null;
                         try {
                             scenario = scenarioManager.readScenario();
-                            System.out.println(scenario.getScenario_description());
+                            System.out.println(scenario.toString());
                             item = scenarioManager.getItem();
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
-                        System.out.println(item.getItem_name() + " " + item.getItem_type() + " " + item.getItem_description());
+                        System.out.println(item.showItemInfo());
                         System.out.println("""
                                 __________________________________
                                 ************ MENU [2] [1] ************
@@ -152,9 +152,7 @@ public class MenuController {
                         System.out.println("Displaying All Possible Scenarios.../n");
                         List<ScenarioManager> scenarios = database.readALLScenarios();
                         for (ScenarioManager scenario : scenarios) {
-                            System.out.println(scenario.getScenario_name());
-                            System.out.println(scenario.getScenario_type());
-                            System.out.println(scenario.getScenario_description());
+                            System.out.println(scenario.toString());
                         }
 
 
@@ -234,6 +232,7 @@ public class MenuController {
                             }
                             break;
                     }
+                    break;
                 case 5:
                     System.out.println("""
                             __________________________________

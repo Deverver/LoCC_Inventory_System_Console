@@ -152,18 +152,19 @@ public class DatabaseRepo {
     public ScenarioManager readRandomScenarioFromDB() throws SQLException {
 
         String sql = "SELECT * FROM scenarioList ORDER BY RAND() LIMIT 1";
-
+        ScenarioManager randomScenario;
 
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-
-            int primaryKey = resultSet.getInt("id");
-            String scenario_type = resultSet.getString("scenarioType");
-            String scenario_name = resultSet.getString("scenarioName");
-            String scenario_description = resultSet.getString("scenarioDescription");
-            ScenarioManager scenario = new ScenarioManager(primaryKey, scenario_type, scenario_name, scenario_description);
-            return scenario;
+            if (resultSet.next()) {
+                int primaryKey = resultSet.getInt("id");
+                String scenario_type = resultSet.getString("scenarioType");
+                String scenario_name = resultSet.getString("scenarioName");
+                String scenario_description = resultSet.getString("scenarioDescription");
+                randomScenario = new ScenarioManager(scenario_type, scenario_name, scenario_description);
+                return randomScenario;
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -251,7 +252,6 @@ public class DatabaseRepo {
                 double itemWeight = resultSet.getFloat("itemWeight");
                 double itemValue = resultSet.getFloat("itemValue");
                 boolean itemStackable = resultSet.getBoolean("itemStackable");
-                System.out.println(itemID);
                 switch (itemType) {
                     case "Weapon":
                         buildItem = new Weapon(itemID, itemType, itemName, itemDescription, itemWeight, itemValue, 1);
