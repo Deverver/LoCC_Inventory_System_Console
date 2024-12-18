@@ -178,10 +178,10 @@ public class MenuController {
                                     
                                     Enter the name of the item you wish to Sell
                                     """);
-                            String itemToDelete = input.next();
-                            Item searchedItem = inventoryManager.searchInventory(itemToDelete);
-                            inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + searchedItem.getItem_value());
-                            database.deleteSavedInventory(inventoryManager.searchInventory(itemToDelete).getItem_id());
+                            String searchedItem = input.next();
+                            Item itemToDelete = inventoryManager.searchInventory(searchedItem);
+                            inventoryManager.removeFromInventory(itemToDelete);
+                            database.deleteSavedInventory(inventoryManager.searchInventory(searchedItem).getItem_id());
                             inventoryManager.removeFromInventory(itemToDelete);
                             break;
                         case 2:
@@ -196,17 +196,28 @@ public class MenuController {
                             if (input.next().toLowerCase().trim().equals("yes")) {
                                 for (Item item : inventoryManager.showInventory()) {
 
-                                    if (item instanceof Consumable || item instanceof Ressource) {
-                                        inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + item.getItem_value());
-                                        inventoryManager.removeFromInventory(item.getItem_name());
-                                    } else if (item instanceof Armor || item instanceof Weapon) {
-
-                                        if (!((Armor) item).isEquipped()) {
-                                            inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + item.getItem_value());
-                                            inventoryManager.removeFromInventory(item.getItem_name());
-                                        } else if (!((Weapon) item).isEquipped()) {
-                                            inventoryManager.setGoldAmount(inventoryManager.getGoldAmount() + item.getItem_value());
-                                            inventoryManager.removeFromInventory(item.getItem_name());
+                                    if (item instanceof Consumable) {
+                                        Consumable consumableItem = (Consumable) item;
+                                        int timesToSell = consumableItem.getItemAmount();
+                                        inventoryManager.removeFromInventory(item);
+                                    }
+                                    if (item instanceof Ressource) {
+                                        Ressource ressourceItem = (Ressource) item;
+                                        int timesToSell = ressourceItem.getItemAmount();
+                                        inventoryManager.removeFromInventory(item);
+                                    }
+                                    if (item instanceof Armor) {
+                                        Armor armorItem = (Armor) item;
+                                        boolean equipped = armorItem.isEquipped();
+                                        if (!equipped){
+                                            inventoryManager.removeFromInventory(item);
+                                        }
+                                    }
+                                    if (item instanceof Weapon) {
+                                        Weapon weaponItem = (Weapon) item;
+                                        boolean equipped = weaponItem.isEquipped();
+                                        if (!equipped){
+                                            inventoryManager.removeFromInventory(item);
                                         }
                                     }
                                 }

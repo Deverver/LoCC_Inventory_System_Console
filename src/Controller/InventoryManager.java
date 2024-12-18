@@ -96,8 +96,9 @@ public class InventoryManager {
         }
     }
 
-    public int removeFromInventory(String itemName) {
-        if (inventory.removeItem(itemName) == 1) {
+    public int removeFromInventory(Item item) {
+        if (inventory.removeItem(item) == 1) {
+            this.goldAmount += item.getItem_value();
             refreshInventory();
             return 1;
         } else {
@@ -115,7 +116,7 @@ public class InventoryManager {
     }
 
     public void sortInventoryAlpha() {
-        inventory.getContainedItems().sort(Comparator.comparing(item -> item.getItem_name()));
+        inventory.getContainedItems().sort(Comparator.comparing(Item::getItem_name));
     }
 
     public void sortInventoryWeight() {
@@ -164,9 +165,10 @@ public class InventoryManager {
         setCurrentWeight(updatedWeight);
         setRemainingWeightCapacity(getWeightLimit() - getCurrentWeight());
     }
-public void saveInventory() {
+
+    public void saveInventory() {
 
         inventory.createSavedInventory();
-}
+    }
 
 }// InventoryManager End

@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.InventoryManager;
 import Controller.SavedInventory;
 
 import java.util.ArrayList;
@@ -66,9 +67,10 @@ public class Inventory {
         // If the inventory has no space, reject the item
         return 0;
     }
-    public int removeItem(String itemName) {
-        if (findContainedItemByName(itemName) != -1) {
-            containedItems.remove(findContainedItemByName(itemName));
+    public int removeItem(Item item) {
+        int existingItemIndex = findContainedItemByName(item.getItem_name());
+        if (existingItemIndex != -1) {
+            containedItems.remove(existingItemIndex);
             return 1;
         }else{
             return 0;
@@ -76,13 +78,19 @@ public class Inventory {
     }
 
     public List<Item> getContainedItems() {
+        return containedItems;
 
-        // We create a copy of the Inventory to show to users, this keeps the Inventory inside the InventoryManager in control, this should prevent external changes.
+
+        /*
+        This will be a separate method for when we another ui
+        We create a copy of the Inventory to show to users, this keeps the Inventory inside the InventoryManager in control, this should prevent external changes.
         ArrayList<Item> listedInventory = new ArrayList<>(containedItems.size());
         for (Item item : containedItems) {
             listedInventory.add(item);
         }
         return listedInventory;
+        */
+
     }
 
     public int findContainedItemByName(String searchedItemName) {
