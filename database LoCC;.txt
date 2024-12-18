@@ -20,27 +20,27 @@ FOREIGN KEY(FkItemID) REFERENCES itemList(itemID));
      INSERT INTO itemList (itemType, itemName, itemDescription, itemWeight, itemValue, itemStackable)
 VALUES 
 
-('Weapon', 'Sword', 'A sharp blade for melee combat.', 5, 400, false),
-('Weapon', 'Axe', 'A heavy axe for chopping or combat.', 5, 400, false),
-('Weapon', 'Bow', 'A ranged weapon for firing arrows.', 3.5, 400, false),
+('Weapon', 'Sword', 'A sharp blade for melee combat.', 2.5, 1000, false),
+('Weapon', 'Axe', 'A heavy axe for chopping or combat.', 2.75, 800, false),
+('Weapon', 'Bow', 'A ranged weapon for firing arrows.', 3.5, 900, false),
 
 
-('Armor', 'Helmet', 'Protects the head from damage.', 4, 400, false),
-('Armor', 'Chestplate', 'Offers torso protection in battle.', 4, 400, false),
-('Armor', 'Leggings', 'Guards the legs during combat.', 4, 400, false),
-('Armor', 'Boots', 'Sturdy footwear for defense and mobility.', 4, 400, false),
-('Armor', 'Gloves', 'Hand protection for combat and work.', 4, 400, false),
+('Armor', 'Helmet', 'Protects the head from damage.', 1.8, 300, false),
+('Armor', 'Chestplate', 'Offers torso protection in battle.', 5, 500, false),
+('Armor', 'Leggings', 'Guards the legs during combat.', 2.2, 400, false),
+('Armor', 'Boots', 'Sturdy footwear for defense and mobility.', 2, 250, false),
+('Armor', 'Gloves', 'Hand protection for combat and work.', 1, 150, false),
 
 
-('Consumable', 'Potion', 'Restores health or grants abilities.', 4, 400, true),
-('Consumable', 'Poison', 'Inflicts damage over time.', 4, 400, true),
-('Consumable', 'Arrow', 'Ammunition for bows.', 4, 400, true),
-('Consumable', 'Bullet', 'Ammunition for firearms.', 4, 400, true),
+('Consumable', 'Potion', 'Restores health or grants abilities.', 0.75, 45, true),
+('Consumable', 'Poison', 'Inflicts damage over time.', 0.75, 40, true),
+('Consumable', 'Arrow', 'Ammunition for bows.', 0.1, 4, true),
+('Consumable', 'Bullet', 'Ammunition for firearms.', 0.1, 12, true),
 
 
-('Resource', 'Wood', 'Basic material for crafting.', 4, 400, true),
-('Resource', 'Stone', 'Common building and crafting material.', 4, 400, true),
-('Resource', 'Gemstone', 'Precious mineral for crafting valuable items.', 4, 400, true);
+('Resource', 'Wood', 'Basic material for crafting.', 0.25, 2, true),
+('Resource', 'Stone', 'Common building and crafting material.', 0.75, 2, true),
+('Resource', 'Gemstone', 'Precious mineral for crafting valuable items.', 0.5, 10, true);
 )
 
 
@@ -71,21 +71,16 @@ values('Gathering', 'Forest Foraging', 'You went out on a gathering trip! Scouri
 ('Gathering', 'Snowfield Dig', 'You went out on a gathering trip! Digging through snow, you uncovered “item” frozen beneath the surface.'),
 ('Gathering', 'Bamboo Grove', 'You went out on a gathering trip! Walking through a bamboo forest, you found “item” growing nearby.'),
 ('Gathering', 'Twilight Clearing', 'You went out on a gathering trip! In a clearing at dusk, you picked up “item” shimmering in the twilight.'),
-('Gathering', 'Ashen Ruins', 'You went out on a gathering trip! Amid the remnants of a burned structure, you found “item” untouched by fire.');
+('Gathering', 'Ashen Ruins', 'You went out on a gathering trip! Amid the remnants of a burned structure, you found “item” untouched by fire.'),
 
-
-
-
-
-
-values('Adventure', 'Meteor Crash Site', 'You went out on an adventure! At a smoldering crater, you found “item” in the impact zone.'),
-values('Adventure', 'Cave Expedition', 'You went out on an adventure! You found and explored a cave. You found “item” while exploring.'),
-values('Adventure', 'Lost Ruins', 'You went out on an adventure! You stumbled upon ancient ruins. You found “item” hidden among the rubble.'),
-values('Adventure', 'Forest Clearing', 'You went out on an adventure! Deep in the forest, you found a mysterious clearing. You discovered “item” near an ancient tree.'),
-values('Adventure', 'Mountain Ascent', 'You went out on an adventure! Scaling a tall mountain, you uncovered a hidden path. You found “item” along the way.'),
-values('Adventure', 'Deserted Village', 'You went out on an adventure! Exploring an abandoned village, you found “item” inside an old house.'),
-values('Adventure', 'Shipwreck Cove', 'You went out on an adventure! Investigating a shipwreck, you discovered “item” among the debris.'),
-values('Adventure', 'Underground Lake', 'You went out on an adventure! Exploring a cavern, you found a serene underground lake. You fished out “item” from the waters.'),
-values('Adventure', 'Haunted Manor', 'You went out on an adventure! Braving a spooky manor, you found “item” in a dusty chest.'),
-values('Adventure', 'Volcano Crater', 'You went out on an adventure! Approaching the edge of a dormant volcano, you found “item” buried in the ash.'),
-values('Adventure', 'Glacial Crevasse', 'You went out on an adventure! Venturing into icy terrain, you retrieved “item” frozen in a glacier.');
+('Adventure', 'Meteor Crash Site', 'You went out on an adventure! At a smoldering crater, you found “item” in the impact zone.'),
+('Adventure', 'Cave Expedition', 'You went out on an adventure! You found and explored a cave. You found “item” while exploring.'),
+('Adventure', 'Lost Ruins', 'You went out on an adventure! You stumbled upon ancient ruins. You found “item” hidden among the rubble.'),
+('Adventure', 'Forest Clearing', 'You went out on an adventure! Deep in the forest, you found a mysterious clearing. You discovered “item” near an ancient tree.'),
+('Adventure', 'Mountain Ascent', 'You went out on an adventure! Scaling a tall mountain, you uncovered a hidden path. You found “item” along the way.'),
+('Adventure', 'Deserted Village', 'You went out on an adventure! Exploring an abandoned village, you found “item” inside an old house.'),
+('Adventure', 'Shipwreck Cove', 'You went out on an adventure! Investigating a shipwreck, you discovered “item” among the debris.'),
+('Adventure', 'Underground Lake', 'You went out on an adventure! Exploring a cavern, you found a serene underground lake. You fished out “item” from the waters.'),
+('Adventure', 'Haunted Manor', 'You went out on an adventure! Braving a spooky manor, you found “item” in a dusty chest.'),
+('Adventure', 'Volcano Crater', 'You went out on an adventure! Approaching the edge of a dormant volcano, you found “item” buried in the ash.'),
+('Adventure', 'Glacial Crevasse', 'You went out on an adventure! Venturing into icy terrain, you retrieved “item” frozen in a glacier.');
